@@ -1,0 +1,36 @@
+extends layout2
+
+block content
+    
+        div(id="i" class="col-xs-12 col-sm-12 col-md-12 col-lg-12")
+                -for(var i=0;i<nombres.length;i++)
+                    div(id="esto1" class="panel panel-info")
+                        div(class="panel-body" id="panel-body2" align="center" valign="middle" class="jumbotron")
+                            h3 ACASIO
+                            .form-group
+                                .col-sm-2.col-sm-offset-2
+                                    span(class="label") CODIGO
+                                    div(class="input-group" class="form-group" class="" type="text" name="" id="codEquipo" class="form-control" value="" placeholder="MT-21") #{codEquipo[i]}
+                                            
+                                .col-sm-2.col-sm-offset-1
+                                    span(class="label") EQUIPO    
+                                    div(class="input-group" class="form-group" class="" type="text" name="" id="nombres" class="form-control" value="" placeholder="MOTONIVELADORA") #{nombres[i]}
+                                    
+                                .col-sm-2.col-sm-offset-1s
+                                    span(class="label") ESTADO   
+                                    div(class="input-group" class="form-group" class="" type="text" name="" id="estado" class="form-control" value="" placeholder="buen estado") #{estado[i]}
+
+                            .form-group
+                                img(src="../images/1.png" class="img-responsive" alt="Image")
+                            .form-group
+                                ul(class="nav nav-pills")
+                                    li(role="presentation" class="active") 
+                                        a(href="PartesDiarios") PARTES DIARIOS
+                                    li(role="presentation" class="active") 
+                                        a(href="diesel") DIESEL
+                                    li(role="presentation" class="active") 
+                                        a(href="gasolina") GASOLINA
+                                    li(role="presentation" class="active") 
+                                        a(href="AceiteLubricantes") ACEITES Y LUBRICANTES
+
+    

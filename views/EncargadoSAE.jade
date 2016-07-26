@@ -1,0 +1,59 @@
+extends layout2
+
+block content
+	nav(class="navbar navbar-inverse")
+		.container-fluid
+			div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+				ul.nav.navbar-nav.col-md-12.menuNav
+					li.col-md-2
+						a(href='EQUIPOS') EQUIPOS
+					li.col-md-2
+						a(href='SAM') SAM
+					li(class="dropdown col-md-2")
+							a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") RESIDENCIAS
+								span(class="caret")
+									ul(class="dropdown-menu")
+										li
+											a(href="ResAcasio") ACASIO
+										li
+											a(href="#") RETIRO
+										li
+											a(href="#") TUPIZA
+										li
+											a(href="#") UNCIA
+										li
+											a(href="#") UYUNI
+										li
+											a(href="#") VILLA MAR
+					li(class="col-md-1 col-sm-2",style="padding-left:0;padding-right:0;")
+							a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal",style="padding-left:0;padding-right:0;") MENSAJES
+	.row   
+		.bodyNoticias
+			.row
+				.formNoticia
+					.navii.col-md-12
+						.etNoticia.col-md-11(style="padding-left:0px; padding-right:0px;")
+							textarea(type='text',placeholder='Publicar Noticia..',id='textNoticiaNew',rows="5",style="padding-right:10px;padding-left:10px;")
+						.btnNoticia.col-md-1(style="padding-right:0px;")
+							form(enctype="multipart/form-data",method="post")
+								.form-group.col-md-12
+									.row
+										.imgButton.col-md-10(style="margin:0 auto;display:block;width:100%;")
+											input(type='file',name="nombre",id="botonImg", placeholder="Subir Imagen",accept="image/*")
+									.row
+											a.nombreImg
+								.form-group.col-md-12
+									.row
+										input.btn.btn-primary(type="submit",value="Enviar",id='btnNoticiaNew')
+			.row
+				h1 REPORTES
+				.noticias.col-md-12
+					p.dirImagen #{dirImagen}
+						.cajaNoticia
+							.cajaPosicion
+								strong
+								span
+								span.fecha
+								p
+								img.imagenNoti
+	.footer

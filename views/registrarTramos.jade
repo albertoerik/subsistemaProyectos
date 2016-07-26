@@ -1,0 +1,28 @@
+extends layout2
+
+block content
+    nav(class="navbar navbar-inverse")
+        .container-fluid
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.col-md-12.menuNav
+                    li.col-md-2
+                        a(href='tramos') TRAMOS
+    form(class="form-horizontal", role="form")
+        .container
+            .form-group
+                h3 REGISTRAR TRAMOS
+            .col-sm-8.col-sm-offset-2
+                .form-group
+                    label(for='') Descripcion
+                    input.form-control(type='text', id='descripcionT', placeholder='codigoEquipo')
+                    .errores(id='mensaje1') Campo Requerido!
+                .form-group
+                    label(for='') longitud
+                    input.form-control(type='text', id='longitudT', placeholder='unidad')
+                    .errores(id='mensaje2') Campo Requerido!
+                .form-group
+                    label(for='') costo total
+                    input.form-control(type='text', id='costoTotalT', placeholder='Estado')
+                    .errores(id='mensaje3') Campo Requerido!
+                .form-group
+                    button.btn.btn-primary.btnRegistroTramos(type='button', data-toggle='modal', data-target='#myModal') Enviar

@@ -1,0 +1,35 @@
+extends layout2
+
+block content
+    nav
+      ul
+        li
+          a(title='Materias', href='#') REGISTRAR USUARIO
+        li
+          a(title='Notas', href='#') PERSONAL
+        li
+          a(href='InicioGeolocalizacion') INICIO
+        li
+          a(href='#') SALIR
+    .ventanaModal
+      .contenido
+        h1.h1Success REGISTRO EXITOSO!
+        img.imgSuccess(src='../images/success.png')
+        input.btnSuccess(type="submit",placeholder="Aceptar", name="aceptar", value="Aceptar")
+    section.Registro
+      form(method="post")
+        h1 Registrar Nuevo Usuario
+
+        p Nombre
+        input.Entradas(type="text",placeholder="Nombres", name="nombres")
+        p Apellido
+        input.Entradas(type="text",placeholder="apellidos", name="apellidos")
+        p Contraseña
+        input.Entradas(type="password",placeholder="password", name="password")
+        p Cargo
+        input.Entradas(type="text",placeholder="cargo", name="cargo")
+        p Domicilio
+        input.Entradas(type="text",placeholder="domicilio", name="domicilio")
+        p Telefono
+        input.Entradas(type="text",placeholder="telefono", name="telefono")
+        input.btnEnviar(type="submit", value="Enviar")

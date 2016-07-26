@@ -1,0 +1,91 @@
+extends layout2
+
+block content
+    nav(class="navbar navbar-inverse")
+        .container-fluid
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.col-md-12.menuNav
+                    li.col-md-2
+                        a(href='#')
+                    li.col-md-2
+                        a(href='#') 
+                    li.col-md-3
+                        a(href='#')
+    h2 RECURSOS HUMANOS
+    h3.nombreResidencia
+    li.nom(id='variables')=nombres
+    table.table.table-bordered.table-hover.recursosHumanos
+          thead
+              tr
+                th.col-md-2 ID
+                th.col-md-3 PERFIL
+                th.col-md-3 ASIGNAR
+                th.col-md-2 REQUIE
+                th.col-md-2 EXIST
+          tbody
+            tr(align="center" valign="middle")
+              td 1
+              td Residente
+              td(id='nombreResidente') #{nombres[0]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 2
+              td(id='bajar') Encargado Campamento
+              td(id='0') 
+                p #{nombres[1]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 3
+              td Mecanico B
+              td(id='1')
+                p #{nombres[2]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 4
+              td Operador Motoniveladora
+              td(id='2')
+                p #{nombres[3]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 5
+              td Operador B
+              td(id='3')
+                p #{nombres[4]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 6
+              td Operador Multiple
+              td(id='4') 
+                p #{nombres[5]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 7
+              td Chofer
+              td(id='5')
+                p #{nombres[6]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 8
+              td Chofer
+              td(id='6')
+                p #{nombres[7]}
+              td 1
+              td 1
+            tr(align="center" valign="middle")
+              td 9
+              td Chofer
+              td(id='7')
+                p #{nombres[8]}
+              td 1
+              td 1
+    input(type='button',class='btn btn-primary btn-lg btnControlPersonalResidencia', value='MODIFICAR PERSONAL')    
+           
+
+

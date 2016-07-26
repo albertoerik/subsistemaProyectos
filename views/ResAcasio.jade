@@ -1,0 +1,305 @@
+extends layout2
+
+block content
+              
+        nav.navbar.navbar-inverse
+            .container-fluid
+                .collapse.navbar-collapse(id="bs-example-navbar-collapse-1")
+                    ul.nav.navbar-nav.col-md-12
+                        li(class="col-md-1" class="dropdown")
+                            a(href="#" class="dropdown-toggle" data-toggle="dropdown")
+                                span(class="glyphicon glyphicon-menu-hamburger", aria-hidden="true")
+                            ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1").mm
+                                li(role="presentation")
+                                    a(role="menuitem" tabindex="-1" class="list-group-item active") VEHICULOS
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn1") MOTONIVELADORA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn2") TRACTOR TURNA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn3") PALA FRONTAL
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn4") VOLQUETA HINO
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn5") VOLQUETA NISSAN
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn6") CISTERNA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn7") MOTONIVELADORA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn8") TRACTOR ORUGA 
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn9") CAMIONETA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn10") TRACTOR ORUGA 
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn11") VOLQUETA
+                                    a(role="menuitem" tabindex="-1" href="#" id="btn12") PALA FRONTAL
+        div(class="col-xs-12 col-sm-12 col-md-12 col-lg-12")
+                    div(role="tabpanel")
+                        <!-- Nav tabs -->
+                        ul(class="nav nav-tabs" role="tablist")
+                            li(role="presentation" class="active")
+                                a(href="#home" aria-controls="home" role="tab" data-toggle="tab") inicio
+                            li(role="presentation")
+                                a(href="#partesDiarios" aria-controls="partesDiarios" role="tab" data-toggle="tab") PARTES DIARIOS
+                            li(role="presentation")
+                                a(href="#diesel" aria-controls="diesel" role="tab" data-toggle="tab") DIESEL
+                            li(role="presentation")
+                                a(href="#gasolina" aria-controls="gasolina" role="tab" data-toggle="tab") GASOLINA
+                            li(role="presentation")
+                                a(href="#aceitesLubricantes" aria-controls="aceitesLubricantes" role="tab" data-toggle="tab") ACEITES Y LUBRICANTES
+                            
+                        <!-- Tab panes -->
+                        div(class="tab-content")
+                            div(role="tabpanel" class="tab-pane active" id="home")
+                                div(id="esto1" class="panel panel-info")
+                                    div(class="panel-body" id="panel-body2" align="center" valign="middle" class="jumbotron")
+                                        h3 ACASIO
+                                        .form-group
+                                            .col-sm-2.col-sm-offset-2
+                                                
+                                                    div(class="input-group")
+                                                        .form-group
+                                                            span(class="label") CODIGO
+                                                            input(type="text" name="" id="input" class="form-control" value="" placeholder="MT-21")
+                                            .col-sm-2.col-sm-offset-1
+                                                    div(class="input-group")
+                                                            .form-group
+                                                                span(class="label") EQUIPO
+                                                                input(type="text" name="" id="input" class="form-control" value="" placeholder="MOTONIVELADORA")
+                                            .col-sm-2.col-sm-offset-1
+                        
+                                                    div(class="input-group")
+                                                            .form-group
+                                                                span(class="label") ESTADO
+                                                                input(type="text" name="" id="input" class="form-control" value="" placeholder="buen estado")
+                                        .form-group
+                                            img(src="../images/1.png" class="img-responsive" alt="Image")
+                            div(role="tabpanel" class="tab-pane" id="partesDiarios")
+                                div(class="container-fluid")
+                                    table.table.table-bordered.table-hover
+                                        thead
+                                            .form-group
+                                                h3 PARTES DIARIOS
+                                            .col-sm-2.col-sm-offset-3
+                                                .form-group
+                                                    input.form-control(type='text', placeholder='VEHICULO')
+                                            .col-sm-2.col-sm-offset-0   
+                                                .form-group   
+                                                    input.form-control(type='text', id='', placeholder='N° INTERNO')
+                                            .col-sm-2.col-sm-offset-0   
+                                                .form-group 
+                                                    input.form-control(type='month', id='', placeholder='MES')
+                                div(class="table-responsive")
+                                    table(class="table table-hover")
+                                        thead
+                                            tr
+                                                th FECHA
+                                                th NOMBRE
+                                                th N° PARTE DIARIO
+                                        tbody.bod(align="center" valign="middle")
+                            div(role="tabpanel" class="tab-pane" id="diesel")
+                                div(class="panel panel-default")
+                                    div(class="panel-body")
+                                        div(class="container-fluid")
+                                            table.table.table-bordered.table-hover
+                                                thead
+                                                    .form-group
+                                                        h3 CONSUMO DIESEL
+                                                    .col-sm-2.col-sm-offset-3
+                                                        .form-group
+                                                            input.form-control(type='text', placeholder='VEHICULO')
+                                                    .col-sm-2.col-sm-offset-0   
+                                                        .form-group   
+                                                            input.form-control(type='text', id='', placeholder='N° INTERNO')
+                                                    .col-sm-2.col-sm-offset-0   
+                                                        .form-group 
+                                                            input.form-control(type='month', id='', placeholder='MES')
+                                                    tr
+                                                        th(rowspan="2") FECHA
+                                                        th(rowspan="2") NOMBRES Y APELLIDOS
+                                                        th(rowspan="2") N° PARTE DIARIO
+                                                        th(colspan="2") KILOMETROS
+                                                        th(rowspan="2") HORAS OPERADAS
+                                                        th(rowspan="2") TRAMO
+                                                        th(rowspan="2") N° VALE
+                                                        th(rowspan="2") LITROS
+                                                        th(rowspan="2") PRECIO
+                                                        th(rowspan="2") TOTAL COSTO
+                                                        
+                                                    tr
+                                                        th INICIO
+                                                        th FIN
+                                                tbody
+                                                    tr(align="center") 
+                                                        td 1/02/2016
+                                                        td juan perez
+                                                        td 1
+                                                        td 1250
+                                                        td 1255
+                                                        td 
+                                                        td ñequeta-acasio
+                                                        td 1
+                                                        td 20lts.
+                                                        td 10bs
+                                                        td 200bs.
+                                                    tr(align="center") 
+                                                        td 1/02/2016
+                                                        td juan perez
+                                                        td 2
+                                                        td 1250
+                                                        td 1255
+                                                        td 
+                                                        td potosi-acasio
+                                                        td 2
+                                                        td 20lts.
+                                                        td 10bs
+                                                        td 200bs.
+                                                    tr(align="center") 
+                                                        td 1/02/2016
+                                                        td juan perez
+                                                        td 3
+                                                        td 1250
+                                                        td 1255
+                                                        td 
+                                                        td ñequeta-acasio
+                                                        td 3
+                                                        td 20lts.
+                                                        td 10bs
+                                                        td 200bs.
+                                                    tr(align="center") 
+                                                        td 1/02/2016
+                                                        td juan perez
+                                                        td 4
+                                                        td 1250
+                                                        td 1255
+                                                        td 
+                                                        td ñequeta-acasio
+                                                        td 4
+                                                        td 20lts.
+                                                        td 10bs
+                                                        td 200bs.
+                            div(role="tabpanel" class="tab-pane" id="gasolina") 
+                                table.table.table-bordered.table-hover
+                                    thead
+                                        .form-group
+                                            h3 CONSUMO GASOLINA
+                                        .col-sm-2.col-sm-offset-3
+                                            .form-group
+                                                input.form-control(type='text', id='', placeholder='VEHICULO')
+                                        .col-sm-2.col-sm-offset-0   
+                                            .form-group   
+                                                input.form-control(type='text', id='', placeholder='N° INTERNO')
+                                        .col-sm-2.col-sm-offset-0   
+                                            .form-group 
+                                                input.form-control(type='month', id='', placeholder='MES')
+                                        tr
+                                            th(rowspan="2") FECHA
+                                            th(rowspan="2") NOMBRES Y APELLIDOS
+                                            th(rowspan="2") N° PARTE DIARIO
+                                            th(colspan="2") KILOMETROS
+                                            th(rowspan="2") HORAS OPERADAS
+                                            th(rowspan="2") TRAMO
+                                            th(rowspan="2") N° VALE
+                                            th(rowspan="2") LITROS
+                                            th(rowspan="2") PRECIO
+                                            th(rowspan="2") TOTAL COSTO
+                                            
+                                        tr
+                                            th INICIO
+                                            th FIN
+                                    tbody
+                                        tr(align="center") 
+                                            td 1/02/2016
+                                            td juan perez
+                                            td 1
+                                            td 1250
+                                            td 1255
+                                            td 
+                                            td ñequeta-acasio
+                                            td 1
+                                            td 20lts.
+                                            td 10bs
+                                            td 200bs.
+                                        tr(align="center") 
+                                            td 1/02/2016
+                                            td juan perez
+                                            td 2
+                                            td 1250
+                                            td 1255
+                                            td 
+                                            td potosi-acasio
+                                            td 2
+                                            td 20lts.
+                                            td 10bs
+                                            td 200bs.
+                                        tr(align="center") 
+                                            td 1/02/2016
+                                            td juan perez
+                                            td 3
+                                            td 1250
+                                            td 1255
+                                            td 
+                                            td ñequeta-acasio
+                                            td 3
+                                            td 20lts.
+                                            td 10bs
+                                            td 200bs.
+                                        tr(align="center") 
+                                            td 1/02/2016
+                                            td juan perez
+                                            td 4
+                                            td 1250
+                                            td 1255
+                                            td 
+                                            td ñequeta-acasio
+                                            td 4
+                                            td 20lts.
+                                            td 10bs
+                                            td 200bs.
+                            div(role="tabpanel" class="tab-pane" id="aceitesLubricantes")
+                                table.table.table-bordered.table-hover
+                                    thead
+                                        .form-group
+                                            h3 CONSUMO ACEITES Y LUBRICANTES
+                                        .col-sm-2.col-sm-offset-3
+                                            .form-group
+                                                input.form-control(type='text', id='', placeholder='VEHICULO')
+                                        .col-sm-2.col-sm-offset-0   
+                                            .form-group   
+                                                input.form-control(type='text', id='', placeholder='N° INTERNO')
+                                        .col-sm-2.col-sm-offset-0   
+                                            .form-group 
+                                                input.form-control(type='text', id='', placeholder='MES')
+                                        tr
+                                            .col-md-12
+                                            th.col-md-1 FECHA
+                                            th.col-md-3 NOMBRES Y APELLIDOS
+                                            th.col-md-2 CARGO
+                                            th.col-md-1 LUGAR DE CAMBIO
+                                            th.col-md-2 TIPO LUBRICANTE O ACEITE
+                                            th.col-md-1 CANTIDAD
+                                            th.col-md-1 N° VALE
+                                            th.col-md-1 COSTO LUBRICANTE
+                                            th.col-md-1 TOTAL COSTO
+                                    tbody
+                                        tr(align="center") 
+                                            td 1/02/3016
+                                            td juan perez
+                                            td chofer
+                                            td ACASIO
+                                            td grasa chasis
+                                            td 1
+                                            td 23
+                                            td 15bs
+                                            td 15bs
+                                        tr(align="center") 
+                                            td 1/02/3016
+                                            td juan perez
+                                            td chofer
+                                            td ACASIO
+                                            td grasa chasis
+                                            td 1
+                                            td 23
+                                            td 15bs
+                                            td 15bs
+                                        tr(align="center") 
+                                            td 1/02/3016
+                                            td juan perez
+                                            td chofer
+                                            td ACASIO
+                                            td grasa chasis
+                                            td 1
+                                            td 23
+                                            td 15bs
+                                            td 15bs              

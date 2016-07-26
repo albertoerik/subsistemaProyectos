@@ -1,0 +1,42 @@
+extends layout2
+
+block content
+    nav(class="navbar navbar-inverse")
+        .container-fluid
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.col-md-12.menuNav
+                    li.col-md-2
+                        a(href='EQUIPOS') EQUIPOS
+                    li.col-md-2
+                        a(href='#') SAM
+                    li.col-md-2
+                        a(href='#') SALIR
+    form(class="form-horizontal", role="form")
+        .container
+            .form-group
+                h3 REGISTRAR EQUIPOS
+            .col-sm-8.col-sm-offset-2
+                .form-group
+                    label(for='') codigoEquipo
+                    input.form-control(type='text', id='codE', placeholder='codigoEquipo')
+                    .errores(id='mensaje1') Campo Requerido!
+                .form-group
+                    label(for='') Unidad
+                    input.form-control(type='text', id='nombreE', placeholder='unidad')
+                    .errores(id='mensaje2') Campo Requerido!
+                .form-group
+                    label(for='') Estado
+                    input.form-control(type='text', id='estadoE', placeholder='Estado')
+                    .errores(id='mensaje3') Campo Requerido!
+                .form-group
+                    label(for='') Observaciones
+                    input.form-control(type='text', id='observacionesE', placeholder='Observaciones')
+                    .errores(id='mensaje4') Campo Requerido!
+                    
+                form(action="/" enctype="multipart/form-data" method="post")
+                    label(for='') imagen
+                    
+                    input(type="file" name="upload" multiple)
+                    input(type="submit" value="guardar")
+                .form-group
+                    button.btn.btn-primary.btnRegistroEquipo(type='button', data-toggle='modal', data-target='#myModal') Enviar

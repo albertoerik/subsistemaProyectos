@@ -1,0 +1,93 @@
+extends layout2
+
+block content
+
+        nav.navbar.navbar-inverse
+            .container-fluid
+                .collapse.navbar-collapse(id="bs-example-navbar-collapse-1")
+                    ul.nav.navbar-nav.col-md-12
+                        li(class="col-md-1")
+                            a(href="#")
+                                span(class="glyphicon glyphicon-home", aria-hidden="true")
+                        li(class="col-md-2")
+                            a(href='#') 
+                        li(class="col-md-2")
+                            a(href='#') 
+                        li(class="dropdown col-md-2 col-md-offset-3 avatarrr")
+        table.table.table-bordered.table-hover
+            thead
+                .form-group
+                    h3 CONSUMO GASOLINA
+                .col-sm-2.col-sm-offset-3
+                    .form-group
+                        input.form-control(type='text', id='', placeholder='VEHICULO')
+                .col-sm-2.col-sm-offset-0   
+                    .form-group   
+                        input.form-control(type='text', id='', placeholder='N° INTERNO')
+                .col-sm-2.col-sm-offset-0   
+                    .form-group 
+                        input.form-control(type='month', id='', placeholder='MES')
+                tr
+                    th(rowspan="2") FECHA
+                    th(rowspan="2") NOMBRES Y APELLIDOS
+                    th(rowspan="2") N° PARTE DIARIO
+                    th(colspan="2") KILOMETROS
+                    th(rowspan="2") HORAS OPERADAS
+                    th(rowspan="2") TRAMO
+                    th(rowspan="2") N° VALE
+                    th(rowspan="2") LITROS
+                    th(rowspan="2") PRECIO
+                    th(rowspan="2") TOTAL COSTO
+                    
+                tr
+                    th INICIO
+                    th FIN
+            tbody
+                tr(align="center") 
+                    td 1/02/2016
+                    td juan perez
+                    td 1
+                    td 1250
+                    td 1255
+                    td 
+                    td ñequeta-acasio
+                    td 1
+                    td 20lts.
+                    td 10bs
+                    td 200bs.
+                tr(align="center") 
+                    td 1/02/2016
+                    td juan perez
+                    td 2
+                    td 1250
+                    td 1255
+                    td 
+                    td potosi-acasio
+                    td 2
+                    td 20lts.
+                    td 10bs
+                    td 200bs.
+                tr(align="center") 
+                    td 1/02/2016
+                    td juan perez
+                    td 3
+                    td 1250
+                    td 1255
+                    td 
+                    td ñequeta-acasio
+                    td 3
+                    td 20lts.
+                    td 10bs
+                    td 200bs.
+                tr(align="center") 
+                    td 1/02/2016
+                    td juan perez
+                    td 4
+                    td 1250
+                    td 1255
+                    td 
+                    td ñequeta-acasio
+                    td 4
+                    td 20lts.
+                    td 10bs
+                    td 200bs.

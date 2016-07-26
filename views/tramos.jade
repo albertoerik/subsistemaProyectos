@@ -1,0 +1,32 @@
+extends layout2
+
+block content
+    nav(class="navbar navbar-inverse")
+        .container-fluid
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.col-md-12.menuNav
+                    li(class="col-md-1")
+                        a(href="EncargadoResidencia")
+                            span(class="glyphicon glyphicon-home", aria-hidden="true")
+                    li.col-md-2
+                        a(href='registrarTramos') REGISTRAR TRAMOS
+    h3 TRAMOS 
+    table.table.table-striped.table-hover.table-responsive.col-md-12
+        thead
+            tr
+                th.col-md-1 ID
+                th.col-md-4 DESCRIPCION
+                th.col-md-2 LONGITUD
+                th.col-md-3 COSTO TOTAL
+                
+        tbody
+            tbody
+            -for(var i=0;i<descripcionT.length;i++)
+                tr(id=i align="center" valign="middle")
+                    td(id='idTramos') #{idT[i]}
+                    td(id='descripcion') #{descripcionT[i]}
+                    td(id='longitud') #{longitudT[i]}
+                    td(id='costoTotal') #{costoTotalT[i]}
+                    td.col-md-2
+                        button.btnObras(type="button" class="btn btn-info") obras
+                        

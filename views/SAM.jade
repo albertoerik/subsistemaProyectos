@@ -1,0 +1,29 @@
+extends layout2
+
+block content
+    nav(class="navbar navbar-inverse")
+        .container-fluid
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.col-md-12.menuNav
+                    li(class="col-md-1")
+                        a(href="EncargadoSAE")
+                            span(class="glyphicon glyphicon-home", aria-hidden="true")
+                    li.col-md-2
+                        a(href='REGISTRAR_SAM') REGISTRAR_SAM
+    h3 ACTIVIDADES SAM
+    table.table.table-bordered.table-hover.table-responsive
+        thead
+            tr
+                th ID
+                th CODIGO
+                th ACTIVIDAD
+                th UNIDAD
+                th PRECIO
+        tbody
+            -for(var i=0;i<actividades.length;i++)
+                tr(id=i align="center" valign="middle")
+                    td(id='idSAM') #{idS[i]}
+                    td(id='codSam') #{codS[i]}
+                    td(id='actividad') #{actividades[i]}
+                    td(id='unidad') #{unidad[i]}
+                    td(id='presUnit') #{precio[i]}
