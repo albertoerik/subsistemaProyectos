@@ -6,30 +6,47 @@ block content
             .container-fluid
                 .collapse.navbar-collapse(id="bs-example-navbar-collapse-1")
                     ul.nav.navbar-nav.col-md-12
-                        li(class="col-md-1" class="dropdown")
-                            a(href="#" class="dropdown-toggle" data-toggle="dropdown")
-                                span(class="glyphicon glyphicon-menu-hamburger", aria-hidden="true")
-                            ul(class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1").mm
-                                li(role="presentation")
-                                    a(role="menuitem" tabindex="-1" class="list-group-item active") VEHICULOS
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn1") MOTONIVELADORA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn2") TRACTOR TURNA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn3") PALA FRONTAL
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn4") VOLQUETA HINO
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn5") VOLQUETA NISSAN
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn6") CISTERNA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn7") MOTONIVELADORA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn8") TRACTOR ORUGA 
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn9") CAMIONETA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn10") TRACTOR ORUGA 
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn11") VOLQUETA
-                                    a(role="menuitem" tabindex="-1" href="#" id="btn12") PALA FRONTAL
-        div(class="col-xs-12 col-sm-12 col-md-12 col-lg-12")
+                        li(class="col-md-1")
+                            a(href="EncargadoSAE")
+                                span(class="glyphicon glyphicon-home", aria-hidden="true")
+                        li.col-md-2
+                            a(href='EQUIPOS') EQUIPOS
+                        li.col-md-2
+                            a(href='SAM') SAM
+                        li(class="dropdown col-md-2")
+                                a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") RESIDENCIAS
+                                    span(class="caret")
+                                        ul(class="dropdown-menu")
+                                            li
+                                                a(href="ResAcasio") ACASIO
+                                            li
+                                                a(href="#") RETIRO
+                                            li
+                                                a(href="#") TUPIZA
+                                            li
+                                                a(href="#") UNCIA
+                                            li
+                                                a(href="#") UYUNI
+                                            li
+                                                a(href="#") VILLA MAR
+
+        
+        div(class="col-xs-2 col-sm-2 col-md-2 col-lg-2" id="columnaVehi" class="dropdown")
+            
+            h3 VEHICULOS
+            
+            div(class="list-group" id="vehi")
+            
+               
+        div(class="col-xs-10 col-sm-10 col-md-10 col-lg-10" id="descripcion")
+                  
+                div(class="panel-heading")
+                    h3(class="panel-title") ACASIO
                     div(role="tabpanel")
                         <!-- Nav tabs -->
                         ul(class="nav nav-tabs" role="tablist")
                             li(role="presentation" class="active")
-                                a(href="#home" aria-controls="home" role="tab" data-toggle="tab") inicio
+                                a(href="#home" aria-controls="home" role="tab" data-toggle="tab") VEHICULOS
                             li(role="presentation")
                                 a(href="#partesDiarios" aria-controls="partesDiarios" role="tab" data-toggle="tab") PARTES DIARIOS
                             li(role="presentation")
@@ -42,35 +59,16 @@ block content
                         <!-- Tab panes -->
                         div(class="tab-content")
                             div(role="tabpanel" class="tab-pane active" id="home")
-                                div(id="esto1" class="panel panel-info")
-                                    div(class="panel-body" id="panel-body2" align="center" valign="middle" class="jumbotron")
-                                        h3 ACASIO
-                                        .form-group
-                                            .col-sm-2.col-sm-offset-2
-                                                
-                                                    div(class="input-group")
-                                                        .form-group
-                                                            span(class="label") CODIGO
-                                                            input(type="text" name="" id="input" class="form-control" value="" placeholder="MT-21")
-                                            .col-sm-2.col-sm-offset-1
-                                                    div(class="input-group")
-                                                            .form-group
-                                                                span(class="label") EQUIPO
-                                                                input(type="text" name="" id="input" class="form-control" value="" placeholder="MOTONIVELADORA")
-                                            .col-sm-2.col-sm-offset-1
-                        
-                                                    div(class="input-group")
-                                                            .form-group
-                                                                span(class="label") ESTADO
-                                                                input(type="text" name="" id="input" class="form-control" value="" placeholder="buen estado")
-                                        .form-group
-                                            img(src="../images/1.png" class="img-responsive" alt="Image")
+                                div(id="esto" class="panel panel-info")
+                                    
+                                            
                             div(role="tabpanel" class="tab-pane" id="partesDiarios")
                                 div(class="container-fluid")
                                     table.table.table-bordered.table-hover
                                         thead
                                             .form-group
-                                                h3 PARTES DIARIOS
+                                                h3 MOTONIVELADORA
+                                                
                                             .col-sm-2.col-sm-offset-3
                                                 .form-group
                                                     input.form-control(type='text', placeholder='VEHICULO')
@@ -80,6 +78,7 @@ block content
                                             .col-sm-2.col-sm-offset-0   
                                                 .form-group 
                                                     input.form-control(type='month', id='', placeholder='MES')
+
                                 div(class="table-responsive")
                                     table(class="table table-hover")
                                         thead
@@ -88,6 +87,7 @@ block content
                                                 th NOMBRE
                                                 th N° PARTE DIARIO
                                         tbody.bod(align="center" valign="middle")
+                                            
                             div(role="tabpanel" class="tab-pane" id="diesel")
                                 div(class="panel panel-default")
                                     div(class="panel-body")

@@ -1,0 +1,28 @@
+extends layoutlim
+
+block content
+    .row.filaimagenPrincipal
+        h1 SERVICIO DEPARTAMENTAL DE CAMINOS POTOSÍ
+        h3 Subsistema Planificacion de Proyectos
+        .row.userResidencia
+            .col-md-2.col-md-offset-1
+                a(id='iramiresidencia')
+                    img(src="/images/home.jpg",class="img-circle")
+                    h3 MI RESIDENCIA
+            .col-md-2
+                a(id='irmenuPQ')
+                    img(src="/images/oo.png",class="img-circle")
+                    h3 PROGRAMACION QUINCENAL
+            .col-md-2
+                a(id='irinformesemanal')
+                    img(src="/images/tractorr.png",class="img-circle")
+                    h3 INFORME SEMANAL
+            .col-md-2
+                a(id='irplanilladeavance')
+                    img(src="/images/tractorr.png",class="img-circle")
+                    h3 PLANILLA DE AVANCE
+            .col-md-2(data-toggle="modal" data-target="#myModal")
+                img(src="/images/mensajes.jpg",class="img-circle")
+                h3 MENSAJES
+    include modalUsuario
+    script(src="/javascripts/bootstrap.min.js")

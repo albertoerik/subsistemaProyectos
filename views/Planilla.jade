@@ -1,0 +1,105 @@
+extends layout2
+block content
+    .row
+        nav.navbar.navbar-inverse
+            .container-fluid
+                .collapse.navbar-collapse(id="bs-example-navbar-collapse-1")
+                    ul.nav.navbar-nav.col-md-12
+                        li(class="col-md-1")
+                            a(href="Trabajador")
+                                span(class="glyphicon glyphicon-home", aria-hidden="true")
+                        li(class="col-md-2")
+                            a(href='VolumenesTrabajo',id='btnNParteD') VER VOLUMENES TRABAJO
+                        li(class="dropdown col-md-2")
+                            a(href="#") SALIR
+                        li(class="dropdown col-md-2 col-md-offset-3 avatarrr")
+
+    .row
+        .row
+            .col-md-12#nobreresidencia   
+        .row
+            .col-md-12
+                h4.col-md-2.col-md-offset-2(style="color: #010101") RUTA:
+                select.form-control(id="rutaplanilla" style="width:40%;display:block;")
+        .row
+            .col-md-12
+                h4(style="text-align: center;") ITEMS,CANTIDADES Y PRECIOS
+        .row
+            .col-md-12
+                h4(style="text-align: center;") CERTIFICADO DE PAGO No. 2  -  GESTION 2016
+        .row
+            .col-md-12
+                table#planillareporte(border="1",style="width:95%; height:auto; padding:10px; margin:0 auto; solid #313131")
+                    thead
+                        tr(style="background:#CDDEEB;")
+                            th(rowspan='3') COD. ACT. U.O.
+                            th(rowspan='3') DESCRIPCION
+
+                            th(colspan='4') SEGUN CONTRATO
+                            th(colspan='4') SEGUN ORDEN TRABAJO Nº 1
+                            th(colspan='2') VALORIZ. A MES ANTERIOR
+                            th(colspan='2') VALORIZ. PRESENTE MES
+                            th(colspan='2') VALORIZ. A LA FECHA
+                            th(colspan='2') % DE AVANCE
+                        tr(style="background:#CDDEEB;")
+                            th(colspan='2') PRECIO UNITARIO 
+                            th(colspan='1', rowspan='2') CANTIDAD
+                            th(colspan='1', rowspan='2') MONTO ORIGINAL
+
+                            th(colspan='1', rowspan='2') ORDEN DE TRABAJO 
+                            th(colspan='1', rowspan='2') CANTIDAD ACTUAL
+                            th(colspan='1', rowspan='2') CONTRATO ACTUALIZADO
+                            th(colspan='1', rowspan='2') %DEC(-) INC(+)
+
+                            th(colspan='1', rowspan='2') CANTIDAD
+                            th(colspan='1', rowspan='2') MONTOS
+
+                            th(colspan='1', rowspan='2') CANTIDAD
+                            th(colspan='1', rowspan='2') MONTOS
+
+                            th(colspan='1', rowspan='2') CANTIDAD
+                            th(colspan='1', rowspan='2') MONTOS
+
+                            th(colspan='1', rowspan='2') DEL MES
+                            th(colspan='1', rowspan='2') A LA FECHA
+                        tr(style="background:#CDDEEB;")
+                            th(colspan='1' style="width:4%") UNI
+                            th(colspan='1') BS.
+                    tbody.bodyplanilla
+    
+    .container(style="text-align:center;")
+      #editor
+      .btn-group
+        button.btn.btn-info.btn-sm.dropdown-toggle#cmd imprimir PDF
+        button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal') Enviar Reporte
+      
+      #myModal.modal.fade(role='dialog')
+        .modal-dialog
+          
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal') &times;
+              |           
+              h4.modal-title ENVIAR REPORTES
+            |         
+            .modal-body
+              form.form-horizontal(action="/" enctype="multipart/form-data" method="post")
+                
+                            .form-group
+                                label.col-lg-2.control-labe CATEGORIA
+                                .col-lg-10
+                                    select#selectcategoria.form-control(name='')
+                                        option(value='1') planilla de avance
+                                        option(value='2') informe semanal
+                        
+                            .form-group   
+                                label.col-lg-2.control-label REPORTE
+                                .col-lg-10
+                                    input(type="file" name="upload" multiple)
+                            .form-group
+                                .col-lg-offset-2.col-lg-10
+                                    button.btn.btn-info.dropdown-toggle(type="submit" id="enviar" value="guardar") enviar
+            |         
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              

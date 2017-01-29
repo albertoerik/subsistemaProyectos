@@ -1,0 +1,33 @@
+extends layout4
+
+block content
+	.cont
+			
+			h3 PROGRAMACIONES QUINCENALES
+			table.table.table-responsive(style="width:80%;margin:0 auto;background:#fff")
+				thead
+					tr(class="info")
+						th N°
+						th FECHA DE PREPARACION
+						th MES
+						th TRAMO
+						th 
+						th 
+						th 
+				tbody.contenidotabla
+			.mesajealerta
+			
+			.row(style='margin:60px')
+			.modal.fade.bs-example-modal-lg.modalSmall(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')
+					.modal-dialog.modal-lg(role='document')
+							.modal-content
+									.modal-header
+											button.close(type='button', data-dismiss='modal', aria-label='Close')
+													span(aria-hidden='true') ×
+											h4#myModalLabel.modal-title(align="center") PROGRAMACION QUINCENAL
+									.modal-body
+											
+									.modal-footer
+											button.btn.btn-primary.btnguardarcambios(type='button', data-dismiss='modal') Guardar Cambios
+											button.btn.btn-primary.btnaceptar(type='button', data-dismiss='modal') Aceptar
+		button.btn.btn-primary.botonnuevoPQ(type='button',style='margin:0 auto;display:block;') NUEVO

@@ -1,0 +1,142 @@
+extends layoutQuincenal
+
+block content
+        
+        .Content
+            .row.col-md-12.scroll1(style="height:300px;padding:0;marging:0;top:0;")
+                .cabecera.col-md-12(style="background: url('/images/sedeca.jpg') no-repeat; width: 100%;height: 100%;padding:0;margin:0 auto;")
+            .row.col-md-12.selectMes(style="padding-left:40px;") 
+                .form-group.col-md-12
+                    h4 SELECCIONE EL MES
+                    form(name="formulario",id='meses')
+                        select.form-control#selectmes(name="mes",style="width:50%;margin:0 auto;display:block;")
+                            option#optiondelmes(value="1") enero
+                            option#optiondelmes(value="2") febrero
+                            option#optiondelmes(value="3") marzo
+                            option#optiondelmes(value="4") abril
+                            option#optiondelmes(value="5") mayo
+                            option#optiondelmes(value="6") junio
+                            option#optiondelmes(value="7") julio
+                            option#optiondelmes(value="8") agosto
+                            option#optiondelmes(value="9") septiembre
+                            option#optiondelmes(value="10") octubre
+                            option#optiondelmes(value="11") noviembre
+                            option#optiondelmes(value="12") diciembre
+
+            .row.col-md-12(style="padding-left:40px;") 
+                .form-group.col-md-12
+                    h4 RESIDENCIA
+                        small(style="padding-left:20px;")#nobreresidencia
+            .row.col-md-12(style="padding-left:40px;") 
+                .form-group.col-md-12
+                    h4 PROGRAMACION QUINCENAL DEL MES DE
+                        div#messss
+            .row.col-md-12(style="padding-left:40px;") 
+                .form-group.col-md-12
+                    h4 ENCARGADO DE RESIDENCIA
+                        small(style="padding-left:20px;")#nombreresidente
+            .row.col-md-12(style="padding-left:40px;") 
+                .form-group.col-md-12
+                    h4 SELECCIONE EL TRAMO
+                    select.form-control(id="ruta" style="width:50%;margin:0 auto;display:block;")
+
+            li(class="btnMouse1",style='width:60px;margin:0 auto;list-style: none;')
+                img(src="/images/scroll.gif",class="logosedeca", class="img-responsive")
+            .row(style='margin:20px')
+
+            div.panel-body(id="2" style="height:600px;")
+                h3(style='text-align:center;padding-bottom:10px;') PROGRAMACION DE TRABAJO
+                table.table.table-bordered.table-hover.table2
+                    thead 
+                        tr
+                            th(rowspan="3") NRO ACTIVIDAD
+                            th(rowspan="3") SECCION
+                            th(colspan="2") PROGRESIVA
+            
+                            th(colspan="15" id="CalendarioFila") CALENDARIO DE TRABAJO
+                            th(rowspan="3") CANTIDAD TRABAJO PROGRAMADO
+                        tr
+                            th(rowspan="3",style="width:10%") DE
+                            th(rowspan="3",style="width:10%") HASTA
+                            th(class="dia0")
+                            th(class="dia1")
+                            th(class="dia2")
+                            th(class="dia3")
+                            th(class="dia4")
+                            th(class="dia5")
+                            th(class="dia6")
+                            th(class="dia7")
+                            th(class="dia8")
+                            th(class="dia9")
+                            th(class="dia10")
+                            th(class="dia11")
+                            th(class="dia12")
+                            th(class="dia13")
+                            th(class="dia14")
+                            th(class="dia15")
+
+                        tr
+                            th(class="nro0")
+                            th(class="nro1")
+                            th(class="nro2")
+                            th(class="nro3")
+                            th(class="nro4")
+                            th(class="nro5")
+                            th(class="nro6")
+                            th(class="nro7")
+                            th(class="nro8")
+                            th(class="nro9")
+                            th(class="nro10")
+                            th(class="nro11")
+                            th(class="nro12")
+                            th(class="nro13")
+                            th(class="nro14")
+                            th(class="nro15")
+                    tbody.boddd
+                        
+            li(class="btnMouse2",style='width:60px;margin:0 auto;list-style: none;')
+                img(src="/images/scroll.gif",class="logosedeca", class="img-responsive")
+            .row(style='margin:20px')
+            div.panel-body(id="3" style="height:600px;")
+                h3(style='text-align:center;padding-bottom:10px;') REQUERIMIENTO UNIDADES DE OBRA
+                table.table.table-bordered.table-hover.scroll2.table-responsive(style='width:80%;margin: 0 auto;')
+                    thead
+                        tr.vehiculoSelect
+                            th UNIDAD
+                            th LITROS/HORA
+                    tbody 
+                        
+                .row(style='margin:60px')
+            li(class="btnMouse3",style='width:60px;margin:0 auto;list-style: none;')
+                img(src="/images/scroll.gif",class="logosedeca", class="img-responsive")
+            .row(style='margin:20px')
+            div.panel-body(id="4" style="height:600px;")
+                h3(style='text-align:center;padding-bottom:10px;') REQUERIMIENTO MATERIALES DE OBRA
+                table.table.table-bordered.table-hover.scroll2.table-responsive(style='width:80%;margin: 0 auto;')
+                    thead
+                        tr.materialSelect
+                            th MATERIAL
+                            th CANTIDAD
+                            th PRECIO
+                    tbody 
+                        tr 
+                            th(colspan='3') OBSERVACIONES
+                        tr(style="padding:0px;margin:0px;")  
+                            td(colspan='3',style="padding:0px;margin:0px;")
+                                textarea(id="obse" style='width:100%;',rows="3")
+                .row(style='margin:60px')
+                button.btn.btn-primary.clickS(type='button',style='margin:0 auto;display:block;') GUARDAR PROGRAMACION QUINCINENAL
+                .row(style='margin:60px')
+                .modal.fade.bs-example-modal-sm.modalSmall(tabindex='-1', role='dialog', aria-labelledby='mySmallModalLabel')
+                  .modal-dialog.modal-sm(role='document')
+                    .modal-content
+                      .modal-header
+                        button.close(type='button', data-dismiss='modal', aria-label='Close')
+                          span(aria-hidden='true') ×
+                        h4#myModalLabel.modal-title SELECCIONE EL VEHICULO
+                      .modal-body(style="height:70vh")
+                        
+                      .modal-footer
+                        button.btn.btn-primary(type='button', data-dismiss='modal') Aceptar
+        .mensajealerta
+        script(src="/javascripts/bootstrap.min.js")

@@ -1,0 +1,44 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/styleQuincenal.css')
+    link(rel='stylesheet', href='/stylesheets/bootstrap.min.css')
+    link(rel='stylesheet', href='/stylesheets/sweetalert.css')
+    link(rel='stylesheet', href='/stylesheets/estilos.css')
+    script(src="/javascripts/jquery.js")
+    script(src="/socket.io/socket.io.js")
+    script(src="/javascripts/jquery.mousewheel.min.js")
+    script(src="/javascripts/scroll.js")
+
+    script(src="/javascripts/principalQuincenal.js")
+    script(src="/javascripts/Mensajes.js")
+    script(src="/javascripts/sweetalert.min.js")
+  body
+    nav(class="navbar navbar-inverse").navbar-fixed-top
+            .container-fluid
+                .navbar-header
+                  button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                  a(href="MenuPrincipal",style='padding:0')
+                    img(src="/images/logoSEDECA.png",class="logoSEDECA")
+                div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                  ul.nav.navbar-nav.navbar-right
+                    li
+                      a(href='asignacionactividades') asignar actividades
+                    li
+                      a(href='listaprogramacionquincenal?mes=septiembre') listar PQ
+                    li
+                      a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal",style="padding-left:0;padding-right:0;") MENSAJES
+                    li
+                      a(href="#", class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                        span(class="glyphicon glyphicon-user")
+                          ul(class="dropdown-menu")
+                            li
+                              a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
+                            li
+                              a(style='cursor:pointer',id='salirsistema') Salir
+    block content

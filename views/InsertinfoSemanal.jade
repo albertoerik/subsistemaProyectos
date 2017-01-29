@@ -1,0 +1,114 @@
+extends layoutInfoSemanal
+
+block content
+    h2 Informe Semanal de Actividades
+    table.table.table-bordered(style="width:95%;margin:0 auto;")
+        thead
+            tr.head1
+                th(rowspan="2",style="width:20px;")
+                    div
+                        span DIA
+                th(rowspan="2",style="width:20px;")
+                    div
+                        span RUTA
+                th(class="rotat",rowspan="2")
+                    div
+                        span SECCION
+                th(class="rotat",rowspan="2")
+                    div
+                        span K.INICIAL
+                th(class="rotat",rowspan="2")
+                    div
+                        span K.FINAL
+                th(class="rotat",rowspan="2")
+                    div
+                        span ACTIVIDAD
+                th(class="rotat",rowspan="2")
+                    div
+                        span VOLUMENES
+                th(colspan="4",style="text-align:center;")
+                    div
+                        span PERSONAL
+                th(colspan="4",style="text-align:center;")
+                    div
+                        span MATERIALES
+                th(colspan="4",style="text-align:center;")
+                    div
+                        span EQUIPOS
+                th(rowspan="2",style="text-align:center")
+                    div
+                        span OBSERVACIONES
+            tr.head2
+                th(class="rotat")
+                    div
+                        span CLASE
+                th(class="rotat")
+                    div
+                        span H.REGULARES
+                th(class="rotat")
+                    div
+                        span CLASE
+                th(class="rotat")
+                    div
+                        span H.REGULARES
+                th(class="rotat")
+                    div
+                        span CLASE
+                th(style="width:20px;")
+                    div
+                        span CANT.
+                th(class="rotat")
+                    div
+                        span CLASE
+                th(style="width:20px;")
+                    div
+                        span CANT.
+                th(class="rotat" style="width:100px;")
+                    div
+                        span N.INTERNO
+                th(class="rotat")
+                    div
+                        span H.UTILIZADAS
+                th(class="rotat" style="width:100px;")
+                    div
+                        span N.INTERNO
+                th(class="rotat")
+                    div
+                        span H.UTILIZADAS
+    button.btn.btn-primary.btnguardarsemanal(type='button',style='margin:0 auto;display:block;') GUARDAR INFORME SEMANAL
+
+    .container(style="text-align:center;")
+      #editor
+      .btn-group
+        button.btn.btn-info.btn-sm.dropdown-toggle#cmd imprimir PDF
+        button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal') Enviar Reporte
+      
+      #myModal.modal.fade(role='dialog')
+        .modal-dialog
+          
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal') &times;
+              |           
+              h4.modal-title ENVIAR REPORTES
+            |         
+            .modal-body
+              form.form-horizontal(action="/" enctype="multipart/form-data" method="post")
+                
+                            .form-group
+                                label.col-lg-2.control-labe TIPO
+                                .col-lg-10
+                                    select#selectcategoria.form-control(name='')
+                                        option(value='1') planilla de avance
+                                        option(value='2') informe semanal
+                        
+                            .form-group   
+                                label.col-lg-2.control-label REPORTE
+                                .col-lg-10
+                                    input(type="file" name="upload" multiple)
+                            .form-group
+                                .col-lg-offset-2.col-lg-10
+                                    button.btn.btn-info.dropdown-toggle(type="submit" id="enviar" value="guardar") enviar
+            |         
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close

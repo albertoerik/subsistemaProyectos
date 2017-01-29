@@ -24,197 +24,130 @@ block content
 						a(href='#') EQUIPOS
 					li.col-md-2
 						a(href='tramos') TRAMOS
-					li.col-md-2
-						a(href='obrasResidencia') OBRAS
 					li(class="col-md-1 col-sm-2",style="padding-left:0;padding-right:0;")
 							a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal",style="padding-left:0;padding-right:0;") MENSAJES
-	div(class="col-xs-2 col-sm-2 col-md-2 col-lg-2")
-		div(class="panel panel-heading")
-				div(class="panel-heading")
-					h3(class="panel-title") TRAMOS
-				div(class="panel-body")
-					div(class="list-group" class="col-md-12")
+	.row
+		.col-md-2
+			div(class="panel panel-heading")
+					div(class="panel-heading")
+						h3(class="panel-title") TRAMOS
+					div(class="panel-body")
+						div(class="list-group" class="col-md-12")
+							//-for(var i=0;i<tramos.length;i++)
+								a(href="#" id="descripcion" class="list-group-item" value="") #{tramos[i].descripcion[0]}
+
+		.col-md-10
+			div(class="panel panel-info")
+					div(class="panel-heading")
+						h3(class="panel-title") ÑEQUETA - ACASIO
+					div(class="panel-body")
 						
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO 
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
-						a(href="#" id="" class="list-group-item") ÑEQUETA - ACASIO
 
-	div(class="col-xs-10 col-sm-10 col-md-10 col-lg-10")
-		div(class="panel panel-info")
-				div(class="panel-heading")
-					h3(class="panel-title") ÑEQUETA - ACASIO
-				div(class="panel-body")
-					
+						div(role="tabpanel")
+							<!-- Nav tabs -->
+							ul(class="nav nav-tabs" role="tablist")
+								li(role="presentation" class="active")
+									a(href="#home" aria-controls="home" role="tab" data-toggle="tab") Actividades
 
-					div(role="tabpanel")
-						<!-- Nav tabs -->
-						ul(class="nav nav-tabs" role="tablist")
-							li(role="presentation" class="active")
-								a(href="#home" aria-controls="home" role="tab" data-toggle="tab") Principal
-							li(role="presentation")
-								a(href="#tab" aria-controls="tab" role="tab" data-toggle="tab") Actividades
-							li(role="presentation")
-								a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab") 
-					
-						<!-- Tab panes -->
-						div(class="tab-content")
-							div(role="tabpanel" class="tab-pane active" id="home")
-								div(class="table-responsive")
-								table(class="table table-hover").table-bordered
-									thead
-										tr
-											th(rowspan="2").col-md-1 CODIGO
-											th(rowspan="2").col-md-2 DESCRIPCION
-											th(rowspan="2").col-md-2 UNIDAD
-											th(rowspan="2").col-md-2 CANTIDAD
-											th(colspan="2").col-md-1 PRECIO
-										tr
-											th.col-md-1 UNITARIO
-											th.col-md-1 TOTAL
-									tbody
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-										tr(align="center" valign="middle")
-											td 2010
-											td reposicion de ripio
-											td M3
-											td 200km
-											td 500bs 
-											td 100000
-
-							div(role="tabpanel" class="tab-pane" id="tab")
-								
-									div(class="panel-head")
-										h2 ACTIVIDADES ANUALES
-										div(class="panel-body")
-											.col-sm-2.col-sm-offset-3
-												.form-group
-													span(class="label") Fecha de inicio
-													input(type="date" name="" id="input" class="form-control" value="" required="required" title="")
-											.col-sm-2.col-sm-offset-2
-												.form-group
-													span(class="label") Fecha de culminacion
-													input(type="date" name="" id="input" class="form-control" value="" required="required" title="")
+								li(role="presentation")
+									a(href="#tab" aria-controls="tab" role="tab" data-toggle="tab") Nueva Actividad
+								li(role="presentation")
+									a(href="#tab1" aria-controls="tab1" role="tab" data-toggle="tab") 
+						
+							<!-- Tab panes -->
+							div(class="tab-content")
+								div(role="tabpanel" class="tab-pane active" id="home")
+									div(class="table-responsive" id="tablaactividades")
+									table(class="table table-hover").table-bordered
+										thead
+											tr
+												th(rowspan="2").col-md-1 CODIGO
+												th(rowspan="2").col-md-2 DESCRIPCION
+												th(rowspan="2").col-md-2 UNIDAD
+												th(rowspan="2").col-md-2 CANTIDAD
+												th(colspan="2").col-md-1 PRECIO
+											tr
+												th.col-md-1 UNITARIO
+												th.col-md-1 TOTAL
+										tbody
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+											tr(align="center" valign="middle")
+												td 2010
+												td reposicion de ripio
+												td M3
+												td 200km
+												td 500bs 
+												td 100000
+							
+								div(role="tabpanel" class="tab-pane" id="tab")
 										
-										div(class="table-responsive")
-											table(class="table table-hover")
-												thead
-													tr
-														th Actividad
-														th cantidad
-														th unidad
-														th precio unitario
-												tbody
-													tr
-														td
-																select(name="" id="input" class="form-control")
-																	option(value="") reposicion de ripio
-																	option(value="") nivelacion de cunetas
-																	option(value="") bacheo asfaltico con equipo
-														td
-																input(type="number" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="200")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="km")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="50bs")
-													tr
-														td
-																select(name="" id="input" class="form-control")
-																	option(value="") reposicion de ripio
-																	option(value="") nivelacion de cunetas
-																	option(value="") bacheo asfaltico con equipo
-														td
-																input(type="number" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="200")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="km")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="50bs")
-													tr
-														td
-																select(name="" id="input" class="form-control")
-																	option(value="") reposicion de ripio
-																	option(value="") nivelacion de cunetas
-																	option(value="") bacheo asfaltico con equipo
-														td
-																input(type="number" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="200")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="km")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="50bs")
-													tr
-														td
-																select(name="" id="input" class="form-control")
-																	option(value="") reposicion de ripio
-																	option(value="") nivelacion de cunetas
-																	option(value="") bacheo asfaltico con equipo
-														td
-																input(type="number" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="200")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="km")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="50bs")
-													tr
-														td
-																select(name="" id="input" class="form-control")
-																	option(value="") reposicion de ripio
-																	option(value="") nivelacion de cunetas
-																	option(value="") bacheo asfaltico con equipo
-														td
-																input(type="number" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="200")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="km")
-														td
-																input(type="text" name="" id="input" class="form-control" value="" required="required" pattern="" title="" placeholder="50bs")
-											button(type="button" class="btn btn-info") guardar
-
-							div(role="tabpanel" class="tab-pane" id="tab1")
-								h3 hola
+												h3 Nueva Actividad 
+												//form(class="form-horizontal")
+													.container
+															.form-group
+																label(for='') ACTIVIDAD
+																select(name="" id="Codi" class="form-control")
+															.form-group
+																label(for='') CANTIDAD
+																	
+																input.form-control(type='text', id='cantidad', placeholder='cantidad')
+														
+															button.btn.btn-primary.btnRegistrarActividad(type='button', data-toggle='modal', data-target='#myModal') Guardar
+												form.form-horizontal(method="post")
+													.form-group
+														label.col-sm-offset-2.col-sm-2.control-label(for='Codi') Actividad
+														.col-sm-offset-2.col-sm-4
+															select(name="Codi" id="Codi" class="form-control") 
+																//option #{actividades}
+													.form-group
+														label.col-sm-offset-2.col-sm-2.control-label(for='cantidad') Cantidad
+														.col-sm-offset-2.col-sm-2
+															input#cantidad.form-control(type='text', name="cantidad" placeholder='')
+													div#total
+													.form-group
+														.col-sm-offset-5.col-sm-10
+															button.btnregactividad.btn.btn-primary(type='button') GUARDAR
+													
+								div(role="tabpanel" class="tab-pane" id="tab1")
+									

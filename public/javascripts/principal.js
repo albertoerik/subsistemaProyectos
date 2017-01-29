@@ -1,570 +1,424 @@
 var auxx;
 var estado;
 $(function(){
-	var socket=io('http://192.168.1.70:5000');
+	var socket=io();
 	var socket2=io();
-	var socket3=io('http://192.168.1.12:5000');
-
-	var Principal=$(location).attr('href');
-	if(Principal=='http://localhost:5000/EncargadoResidencia'){
-		socket.emit('notificaciones');  //envia un alerta para listar NOTIFICACIONES
-	}
-	$('.avatarNombre').text(sessionStorage.getItem("Nombre"));
-	$("#botonImg").change(function(){
-        var nombree=($(this).val()).toString();var tamano=nombree.length;
-        if(tamano>24){
-        	var total=nombree.substring(12,18);total=total+'..';var formato=nombree.substring(tamano-4,tamano);total=total+formato;$('.nombreImg').text(total);
-        }else{
-        	var total=nombree.substring(12,tamano);$('.nombreImg').text(total);
-        }
-    });
-
-	var auuu=$('.dirImagen').text();
-	if(auuu!=''){
-		var direccionImg=$('.dirImagen').text();// F:/fmdskf/sfa
-		var direction='http://192.168.1.68:5000/';
-		for (var i = 0; i <direccionImg.length; i++) {
-			direction=direction+direccionImg[i];
-		};
-		var almacenar=sessionStorage.getItem("CI");
-		var noticia=sessionStorage.getItem("mensaje");
-		var valor={noticia:noticia,ci:almacenar,direccion:direction}
-		console.log('la nueva notificacion: ',valor);
-		$('.dirImagen').text('');
-		socket.emit("nuevaNoticia",valor);
-	}
-	socket.on('NotificacionResponse', function(r){
-		$(".cajaNoticia").remove();
-		$(".cajaPosicionNoti").remove();
-		$(".cajaNoticia strong").remove();
-		$(".cajaNoticia span").remove();
-		$(".cajaNoticia p").remove();
-		$(".imagenNoti").remove();
-		var img=r.direccionImg;
-		//console.log(img);
-		var imagenesTotal=[];
-		var img2="src='";
-		for(var j=0;j<img.length;j++){
-			var palabra=img[j].toString();
-			for(var k=0;k<palabra.length;k++){
-				img2=img2+palabra[k];
-			}
-			img2=img2+"'";
-			imagenesTotal.push(img2);
-			img2="src='";
-		}
-		for(var i=r.nombre.length-1; i>=0; i--){
-			$(".noticias").append( '<div class=cajaNoticia><div class=cajaPosicionNoti><strong>'+r.nombre[i]+'</strong><span>'+r.cargo[i]+' </span><span class=fechaNoti>'+r.fecha[i]+'</span><p>'+r.descripcion[i]+'</p><img class=imagenNoti '+imagenesTotal[i]+'></div></div>');
-		}
+	var socket3=io();
+	var aux=JSON.parse(localStorage.getItem('userinfo'));
+	socket.emit('nuevousuario',aux.idusuario);//enviar mi id para tener usuario en el socket
+	socket.on('usernames',function(data){
+		console.log(data);
 	});
-	$("#btnNoticiaNew").click(function(){
-		var mensaje=$('#textNoticiaNew').val();
-		sessionStorage.setItem('mensaje',mensaje);
-	});
-	$('.btnRegistroEquipo').click(function(){
-		var codigo = $('#codE').val();
-		var nombre = $('#nombreE').val();
-		var estado = $('#estadoE').val();
-		var observaciones = $('#observacionesE').val();
-		var datos={codigo:codigo,nombre:nombre,estado:estado,observaciones:observaciones};
 
-		//console.log('datossss', datos);
-		if(codigo==''){
-			$("#mensaje1").fadeIn( "slow" );
-			return false;
-		}
-		else
-		{
-			$("#mensaje1").fadeOut( "slow" );
-			if(nombre==''){
-				$("#mensaje2").fadeIn( "slow" );
-				return false;
-			}
-			else
-			{
-				$("#mensaje2").fadeOut( "slow" );
-				if(estado==''){
-					$("#mensaje3").fadeIn( "slow" );
-					return false;
-				}
-				else
-				{
-					$("#mensaje3").fadeOut( "slow" );
-					if(observaciones==''){
-						$("#mensaje4").fadeIn( "slow" );
-						return false;
-					}
-				}
-				$("#mensaje4").fadeOut( "slow" );
-			}
-		}
+	//............asignar actividades a tramos................//
 
-		if(codigo!=''){
-			socket2.emit('RegistrarEquipo',datos);
-			$('#myModal').remove();
-			$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button></div><div class="modal-body"><div class="modal-footer"></div></div></div></div></div>');
-		}
-		//console.log('no registro');
-	});
-	socket2.on('RespuestaRegistroE',function(valor){
-		var estado=valor;
-		$('#codE').val('');
-		$('#nombreE').val('');
-		$('#estadoE').val('');
-		$('#observacionesE').val('');
-		if(estado=='true'){
-			$('.modal-body').append('<h1>REGISTRO EXITOSO</h1><div align="center"><img src="../images/success.png" class="img-responsive" alt="Image"></div>');
-		}
-		else{
-			$('.modal-body').append('<h1>ERROR EN EL REGISTRO</h1><div align="center"><img src="../images/warning.png" class="img-responsive" alt="Image"></div>');
-		}
-		console.log(estado);
-	});
-	$('.btnRegistroSam').click(function(){
-		var codigo = $('#codS').val();
-		var actividad = $('#actividadS').val();
-		var unidad = $('#unidadS').val();
-		var preciounitario = $('#preciounitarioS').val();
-		var datos1={codigo:codigo,actividad:actividad,unidad:unidad,preciounitario:preciounitario};
-		if(codigo==''){
-			$("#mensaje1").fadeIn( "slow" );
-			return false;
-		}
-		else
-		{
-			$("#mensaje1").fadeOut( "slow" );
-			if(actividad==''){
-				$("#mensaje2").fadeIn( "slow" );
-				return false;
-			}
-			else
-			{
-				$("#mensaje2").fadeOut( "slow" );
-				if(unidad==''){
-					$("#mensaje3").fadeIn( "slow" );
-					return false;
-				}
-				else
-				{
-					$("#mensaje3").fadeOut( "slow" );
-					if(preciounitario==''){
-						$("#mensaje4").fadeIn( "slow" );
-						return false;
-					}
-				}
-				$("#mensaje4").fadeOut( "slow" );
-			}
-		}
+	$('.btnregactividad').click(function(){
+		var idtramo=$(this).attr('value');
 
-		if(codigo!=''){
-			socket2.emit('RegistrarSam',datos1);
-		$('#myModal').remove();
-		$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button></div><div class="modal-body"><div class="modal-footer"></div></div></div></div></div>');
-		
-		}
+		var actividades = $('#fila'+idtramo+' select').val();
+		var cantidad = $('#fila'+idtramo+' .cantidad').val();
+		var preciounitario = $('#fila'+idtramo+' .presunit').val();
 
 		
+		var datosActividades={actividades:actividades,cantidad:cantidad,preciounitario:preciounitario,idtramo:idtramo};
+		console.log('fff',datosActividades);
+		socket2.emit('NuevaActividad',datosActividades);
 	});
-	socket2.on('RespuestaRegistroS',function(valor){
-		var estado=valor;
-		$('#codS').val('');
-		$('#actividadS').val('');
-		$('#unidadS').val('');
-		$('#preciounitarioS').val('');
-		if(estado=='true'){
-			$('.modal-body').append('<h1>REGISTRO EXITOSO</h1><div align="center"><img src="../images/success.png" class="img-responsive" alt="Image"></div>');
-		}
-		else{
-			$('.modal-body').append('<h1>ERROR EN EL REGISTRO</h1><div align="center"><img src="../images/warning.png" class="img-responsive" alt="Image"></div>');
-		}
-		console.log(estado);
-	});
-	//$('.nombreResidencia').text(sessionStorage.getItem("CI"));
-	var direccionUrl=$(location).attr('href');
-	if(direccionUrl=='http://localhost:5000/RecursosHumanos'){
-		auxx=$('#variables').text();
-		BuscadorResidencia(auxx);
-		function BuscadorResidencia(auxx){
-			if(auxx==''){
-				$('.btnControlPersonalResidencia').val('GUARDAR CAMBIOS');
-
-				/*var nombre=$('#1').text();
-				console.log('este el nombre', nombre);*/
-				socket.emit('BuscarUsuariosParaResidencia');
-				var nombre=$('#1').text();
-				$('#1').val(nombre);
-				if($('#1').text()==''){  //entra para registrar
-					for(var i=0;i<8;i++){
-						var nombre=$('#'+i+'').text();
-						$('#'+i+'').append('<div class="has-error has-feedback" id="rojo'+i+'"><input type="text" data-toggle="modal" data-target="#myModal" class="form-control" id="inputError2" aria-describedby="inputError2Status"><span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span id="inputError2Status" class="sr-only">(error)</span></div>');
-						$('#'+i+' input').val(nombre);
-					}
-					estado='registrar';
-					$('.btnControlPersonalResidencia').attr("disabled" , "disabled");
-				}
-				else{  //entra para modificar
-					for(var i=0;i<8;i++){
-						var nombre=$('#'+i+'').text();
-						$('#'+i+'').append('<div class="has-success has-feedback" id="rojo'+i+'"><input type="text" data-toggle="modal" data-target="#myModal" class="form-control" id="inputError2" aria-describedby="inputError2Status"><span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span><span id="inputError2Status" class="sr-only">(error)</span></div>');
-						$('#'+i+' input').val(nombre);
-
-						$('#'+i+' p').css({'display':'none'});	
-					}
-					estado='modificar';
-					$('.btnControlPersonalResidencia').attr("disabled" , "disabled");
-				}
-				
+	socket2.on('RespuestaRegistroactividadestra',function(r){
+			if(r==true){
+				swal({
+				  title: "REGISTRO SATISFACTORIO",
+				  text: "la actividad se registro!",
+				  type: "success",
+				  confirmButtonColor: "#07CC32",
+				  confirmButtonText: "Aceptar!"
+				},
+				function(){
+				  location.reload();
+				});
 			}
 			else{
-				$('.btnControlPersonalResidencia').val('MODIFICAR PERSONAL');
+				swal({
+				  title: "REGISTRO FALLIDO",
+				  text: "existe problemas en la conexion!",
+				  type: "error",
+				  confirmButtonColor: "#DD6B55",
+				  confirmButtonText: "Aceptar!"
+				},
+				function(){
+				  location.reload();
+				});
+			}
+	});
+//.................listar PQ en el menuproquin................//
+	socket2.emit('listarPQ');
+	socket2.on('resplistarPQ',function(val){
+		if(val.estado==true){
+			for(var i=0;i<val.numero.length;i++){
+				$('.contenidotabla').append('<tr id="filatm'+i+'" value="'+val.numero[i]+'"><td id="idquine'+i+'">'+val.numero[i]+'</td><td id="fechaa">'+val.fecha[i]+'</td><td id="mes">'+val.mesquincenal[i]+'</td><td>'+val.nomtramo[i]+'</td><td><button id="btnver'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success">VER</button></td><td><button id="btnmodificar'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning">MODIFICAR</button></td><td><button id="btneliminar'+i+'" type="button" class="btn btn-danger">ELIMINAR</button></td></tr>');
+			}
+		}else{
+			if(val.estado==false){
+				$('.mesajealerta').append('<div class="alert alert-danger"><button type="button" data-dismiss="alert" aria-hidden="true" class="close">×</button><strong>ALERTA!!</strong> No realizo ninguna programacion quincenal. Para realizar una programacion quincenal por favor seleccione el boton nuevo que se encuentra en la parte inferior</div>');
 			}
 		}
-		socket.on('RespuestaBuscarUsuariosResidencia', function(v){
-			$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button><h4 class="modal-title col-md-5">Mensajes Directos</h4><button type="button" class="btn btn-primary col-md-3 col-md-offset-1 btnNuevoMensaje">Nuevo Mensaje</button></div><div class="modal-body PrincipalMensajes"></div><div class="modal-footer"></div></div></div></div>');
-			for(var i=0;i<v.ci.length;i++){
-				$('.modal-body').append('<div class="row" class="close" data-dismiss="modal" aria-label="Close"><h3 id="listass">'+v.nombres[i]+'<small>'+'   '+v.ci[i]+'</small></h3></div></div>');
+//.....................los botones de menuproquin...............................//	
+		$('.botonnuevoPQ').click(function(){
+			location.href="/residenciaQuincenal";
+		});
+		var idQuncenal;
+		for(var j=0;j<val.numero.length;j++){
+			//console.log('el j:',j);
+			$('#btnver'+j+'').click(function(){
+				console.log('el j:',j);
+				idQuncenal=$('#idquine'+2+'').text();
+				console.log('el boton ver', idQuncenal);
+				socket2.emit('verPQ', idQuncenal);
+			})
+			$('#btnmodificar'+j+'').click(function(){
+				idQuncenal=$('#idquine'+2+'').text();
+				console.log('el boton modificar', idQuncenal);
+				socket2.emit('modificarPQ', idQuncenal);
+					
+			})
+			/*$('#btneliminar').click(function(){
+				var idQuncenal=$('#idquine').text();
+				//console.log('el boton ver', idQuncenal);
+				socket2.emit('eliminarPQ', idQuncenal);	
+			})*/
+		}
+		
+        var idrusuarioactual=JSON.parse(localStorage.getItem('userinfo'));
+		socket2.on('respverPQ', function(resp){
+			$('.btnguardarcambios').css('display','none');
+			function cambiofecha(num,dy,o,aux,aux2){
+	            //console.log(num,dy,o,aux,aux2,'functionnn'); // num=30 - dy=Mon - o=0
+	            for(var i=0;i<days.length;i++){  //encuentra el mes y le asigna un numero Ej: Enero=1=o
+	                if(dy==days[i]){
+	                    o=i;
+	                } //o=2=miercoles
+	            }
+	            for(var i=num-1;i>=aux;i--){ //regresa atras para encontrar el dia
+	                if(o==0){
+	                    o=6;
+	                }
+	                else{
+	                    o=o-1;
+	                }      
+	            }
+	            //console.log(o); //6
+	            for(var i=0;i<aux2;i++){ //inserta numeros y dias 16 
+	                //console.log(aux2,aux,i) //16,0
+	                if(o==6){
+	                    $('.dia'+i+'').text(dias[o]);
+	                    $('.nro'+i+'').text(aux);
+	                    o=0; aux++;
+	                }
+	                else{
+	                    $('.nro'+i+'').text(aux);
+	                    $('.dia'+i+'').text(dias[o]);
+	                    o++; aux++;
+	                }
+	            }
+	            //console.log('fff',ii);
+	            if(ii!=0){
+	                console.log('ff',ii);
+	                var clas=15
+	                for(var j=0;j<ii;j++){
+	                    $('.nro'+clas+'').css('display','none');
+	                    $('.dia'+clas+'').css('display','none');
+	                    clas--;
+	                }
+	            }
+	        }
+			console.log('plpl',resp);
+			var dias=['L','M','M','J','V','S','D'];
+	        var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+	        var fecha = new Date();
+	        //cuando no se hizo ninguna planificacion           = false
+	        //se hizo planificacion en las 2 quincenas de 1mes  = 2
+	        //se hizo la planificacion en una sola quincena     = 1
+	        var mesactual;
+	        var mesess=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+	        for(var t=0;t<mesess.length;t++){
+	            if(resp.listarprogramacionesquincenales[0].mesquin==mesess[t]){
+	                mesactual=t+1;
+	                //console.log('uuuu',mesactual);
+	            }
+	        }
+	        var valor=resp.estadoquince;
+	        if(valor==false){
+	        	fecha=new Date(fecha.getFullYear(), $("select[name=mes]").val(), 0);
+	        	var num=fecha.toDateString().substring(8,10);
+	        	var dy=fecha.toDateString().substring(0,3);
+	        	var o=0;var aux=1;var aux2=15;var ii=1;
+	            $('#CalendarioFila').attr('colspan',15);
+	            cambiofecha(num,dy,o,aux,aux2,ii);
+	        }
+	        else{
+	        	if(valor==2){
+	        		$('.selectMes').css('display','none');
+        			fecha=new Date(fecha.getFullYear(),mesactual, 0);
+    		    	var num=fecha.toDateString().substring(8,10); //ultimo dia del mes = 30
+    		    	var dy=fecha.toDateString().substring(0,3); // dia del ultimo dia mes = Mon
+    		    	var o=0;var aux=16;var aux2=parseInt(num)-15;var ii=(31-parseInt(num));
+                    //console.log(aux2,ii,'ve esto',num);
+                    $('#CalendarioFila').attr('colspan',aux2);
+                    cambiofecha(num,dy,o,aux,aux2,ii);
+	        	}
+	        	else{
+	        		if(valor==1){ // mes a llenar Ej: Agosto
+	        			$('.selectMes').css('display','none');
+		        		fecha=new Date(fecha.getFullYear(),mesactual, 0);
+		                //console.log('lelelele',mesactual);
+		    	    	var num=fecha.toDateString().substring(8,10);
+		    	    	var dy=fecha.toDateString().substring(0,3);
+		    	    	var o=0;var aux=1;var aux2=15;var ii=1;
+		                $('#CalendarioFila').attr('colspan',15);
+		    	    	cambiofecha(num,dy,o,aux,aux2,ii);
+	        		}
+	        	}
+	        }
+	        if(valor==false){
+	            textomes = $("#selectmes option:selected").html();
+	            $('#meses select').change(function(){ //funcion que actua cuando ocurre un cambio en el mes
+	                fecha=new Date(fecha.getFullYear(), $("select[name=mes]").val(), 0);
+	                $("#resultado").html(fecha.toDateString());
+	                var num=fecha.toDateString().substring(8,10);
+	                var dy=fecha.toDateString().substring(0,3);
+	                var o=0;var aux=1;var aux2=15;var ii=0;
+	                $('#CalendarioFila').attr('colspan',15);
+	                cambiofecha(num,dy,o,aux,aux2,ii);
+	            });
+	        }
+	        $('.modal-body').append('<div style="padding-left:40px;" class="row col-md-12"></div><div style="padding-left:40px;" class="row col-md-12"><div class="form-group col-md-12"><h4>PROGRAMACION QUINCENAL DEL MES DE<small style="padding-left:20px;">'+resp.listarprogramacionesquincenales[0].mesquin+'</small></h4></div></div><div style="padding-left:40px;" class="row col-md-12"><div class="form-group col-md-12"><h4>ENCARGADO DE RESIDENCIA<small style="padding-left:20px;">'+idrusuarioactual.nombres+'</small></h4></div></div><div style="padding-left:40px;" class="row col-md-12"><div class="form-group col-md-12"><h4>TRAMO</h4><p>'+resp.listarprogramacionesquincenales[0].descriptramo+'</p></div></div><div style="padding-left:40px;" class="row col-md-12"><div class="form-group col-md-6"><h4>FECHA DE</h4><p>'+resp.listarprogramacionesquincenales[0].fechade+'</p></div><div class="form-group col-md-6"><h4>FECHA HASTA</h4><p>'+resp.listarprogramacionesquincenales[0].fechahasta+'</p></div></div><div style="margin:20px" class="row"><h3 style="text-align:center;padding-bottom:10px;">PROGRAMACION DE TRABAJO</h3><table class="table table-bordered table-hover table2"><thead><tr><th rowspan="3">NRO ACTIVIDAD</th><th rowspan="3">SECCION</th><th rowspan="3">UNIDAD</th><th colspan="2">PROGRESIVA</th><th colspan="15" id="CalendarioFila">CALENDARIO DE TRABAJO</th><th rowspan="3">CANTIDAD TRABAJO PROGRAMADO</th></tr><tr><th rowspan="3" style="width:10%">DE</th><th rowspan="3" style="width:10%">HASTA</th><th style="padding:0px;" class="dia0"></th><th style="padding:0px;" class="dia1"></th><th style="padding:0px;" class="dia2"></th><th style="padding:0px;" class="dia3"></th><th style="padding:0px;" class="dia4"></th><th style="padding:0px;" class="dia5"></th><th style="padding:0px;" class="dia6"></th><th style="padding:0px;" class="dia7"></th><th style="padding:0px;" class="dia8"></th><th style="padding:0px;" class="dia9"></th><th style="padding:0px;" class="dia10"></th><th style="padding:0px;" class="dia11"></th><th style="padding:0px;" class="dia12"></th><th style="padding:0px;" class="dia13"></th><th style="padding:0px;" class="dia14"></th><th style="padding:0px;" class="dia15"></th></tr><tr><th style="padding:0px;" class="nro0"></th><th style="padding:0px;" class="nro1"></th><th style="padding:0px;" class="nro2"></th><th style="padding:0px;" class="nro3"></th><th style="padding:0px;" class="nro4"></th><th style="padding:0px;" class="nro5"></th><th style="padding:0px;" class="nro6"></th><th style="padding:0px;" class="nro7"></th><th style="padding:0px;" class="nro8"></th><th style="padding:0px;" class="nro9"></th><th style="padding:0px;" class="nro10"></th><th style="padding:0px;" class="nro11"></th><th style="padding:0px;" class="nro12"></th><th style="padding:0px;" class="nro13"></th><th style="padding:0px;" class="nro14"></th><th style="padding:0px;" class="nro15"></th></tr></thead><tbody class="bodyver"></tbody></table></div><div class="col-md-12"><div class="form-group col-md-6"><table class="table table-bordered table-hover"><thead><tr><th>UNIDAD</th><th>LITROS/HORA</th></tr></thead><tbody class="bodyequipos"></tbody></table></div><div class="form-group col-md-6"><table class="table table-bordered table-hover"><thead><tr><th>MATERIAL</th><th>CANTIDAD</th><th>PRECIO</th></tr></thead><tbody class="bodymateriales"></tbody></table></div><h4 align="center">OBSERVACIONES</h4><div id="observaciones" name="" rows="3" required="required" class="form-control"></div></div>');
+			cambiofecha(num,dy,o,aux,aux2,ii);
+			for(var j=0;j<resp.listarprogramacionesquincenales[0].codisam.length;j++){
+	            $('.bodyver').append('<tr align="center" valign="middle" id="filaa'+j+'"><td>'+resp.listarprogramacionesquincenales[0].codisam[j]+'</td><td>'+resp.listarprogramacionesquincenales[0].seccion[j]+'</td><td>'+resp.listarprogramacionesquincenales[0].unidad[j]+'</td><td>'+resp.listarprogramacionesquincenales[0].progresivade[j]+'</td><td>'+resp.listarprogramacionesquincenales[0].progresivahasta[j]+'</td></tr>');
+	            
+	            for(var k=0;k<15;k++){ //introduce  checbox  X
+	            	var a=resp.listarprogramacionesquincenales[0].tickeo[j].charAt(k);
+	            	//console.log('hhhh',a);
+	            	if(a==1){
+						$('#filaa'+j+'').append('<td id="filafecha'+j+''+k+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default btn-danger">X<input type="checkbox"/></label></div></td>');
+	            	}else{
+	            		if(a==0){
+	            			$('#filaa'+j+'').append('<td id="filafecha'+j+''+k+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default">X<input type="checkbox"/></label></div></td>');
+	            		}
+	            	}
+	            }
+	            $('#filaa'+j+'').append('<td>'+resp.listarprogramacionesquincenales[0].cantidadtrabajoprog[j]+'</td>')
+	        }
+            for(var h=0;h<resp.listarprogramacionesquincenales[0].codigointerno.length;h++){
+				$('.bodyequipos').append('<tr><td>'+resp.listarprogramacionesquincenales[0].codigointerno[h]+'</td><td>'+resp.listarprogramacionesquincenales[0].litroshora[h]+'</td></tr>');
+            }
+            for(var h=0;h<resp.listarprogramacionesquincenales[0].descripmaterial.length;h++){
+            	$('.bodymateriales').append('<tr><td>'+resp.listarprogramacionesquincenales[0].descripmaterial[h]+'</td><td>'+resp.listarprogramacionesquincenales[0].cantidad[h]+'</td><td>'+resp.listarprogramacionesquincenales[0].precio[h]+'</td></tr>');
+            }
+            $('#observaciones').append(''+resp.listarprogramacionesquincenales[0].observaciones+'');
+            $('.btnaceptar').click(function(){
+            	location.reload();
+            })
+	    });
+		socket2.on('respmodificarPQ',function(val){	
+			$('.btnaceptar').css('display','none');
+			function cambiofecha(num,dy,o,aux,aux2){
+	            //console.log(num,dy,o,aux,aux2,'functionnn'); // num=30 - dy=Mon - o=0
+	            for(var i=0;i<days.length;i++){  //encuentra el mes y le asigna un numero Ej: Enero=1=o
+	                if(dy==days[i]){
+	                    o=i;
+	                } //o=2=miercoles
+	            }
+	            for(var i=num-1;i>=aux;i--){ //regresa atras para encontrar el dia
+	                if(o==0){
+	                    o=6;
+	                }
+	                else{
+	                    o=o-1;
+	                }      
+	            }
+	            //console.log(o); //6
+	            for(var i=0;i<aux2;i++){ //inserta numeros y dias 16 
+	                //console.log(aux2,aux,i) //16,0
+	                if(o==6){
+	                    $('.dia'+i+'').text(dias[o]);
+	                    $('.nro'+i+'').text(aux);
+	                    o=0; aux++;
+	                }
+	                else{
+	                    $('.nro'+i+'').text(aux);
+	                    $('.dia'+i+'').text(dias[o]);
+	                    o++; aux++;
+	                }
+	            }
+	            //console.log('fff',ii);
+	            if(ii!=0){
+	                console.log('ff',ii);
+	                var clas=15
+	                for(var j=0;j<ii;j++){
+	                    $('.nro'+clas+'').css('display','none');
+	                    $('.dia'+clas+'').css('display','none');
+	                    clas--;
+	                }
+	            }
+	        }
+			var dias=['L','M','M','J','V','S','D'];
+	        var days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+	        var fecha = new Date();
+	        //cuando no se hizo ninguna planificacion           = false
+	        //se hizo planificacion en las 2 quincenas de 1mes  = 2
+	        //se hizo la planificacion en una sola quincena     = 1
+	        var mesactual;
+	        var mesess=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+	        for(var t=0;t<mesess.length;t++){
+	            if(val.listarprogramacionesquincenales[0].mesquin==mesess[t]){
+	                mesactual=t+1;
+	                //console.log('uuuu',mesactual);
+	            }
+	        }
+	        var valor=val.estadoquince;
+	        if(valor==false){
+	        	fecha=new Date(fecha.getFullYear(), $("select[name=mes]").val(), 0);
+	        	var num=fecha.toDateString().substring(8,10);
+	        	var dy=fecha.toDateString().substring(0,3);
+	        	var o=0;var aux=1;var aux2=15;var ii=1;
+	            $('#CalendarioFila').attr('colspan',15);
+	            cambiofecha(num,dy,o,aux,aux2,ii);
+	        }
+	        else{
+	        	if(valor==2){
+	        		$('.selectMes').css('display','none');
+        			fecha=new Date(fecha.getFullYear(),mesactual, 0);
+    		    	var num=fecha.toDateString().substring(8,10); //ultimo dia del mes = 30
+    		    	var dy=fecha.toDateString().substring(0,3); // dia del ultimo dia mes = Mon
+    		    	var o=0;var aux=16;var aux2=parseInt(num)-15;var ii=(31-parseInt(num));
+                    //console.log(aux2,ii,'ve esto',num);
+                    $('#CalendarioFila').attr('colspan',aux2);
+                    cambiofecha(num,dy,o,aux,aux2,ii);
+	        	}
+	        	else{
+	        		if(valor==1){ // mes a llenar Ej: Agosto
+	        			$('.selectMes').css('display','none');
+		        		fecha=new Date(fecha.getFullYear(),mesactual, 0);
+		                //console.log('lelelele',mesactual);
+		    	    	var num=fecha.toDateString().substring(8,10);
+		    	    	var dy=fecha.toDateString().substring(0,3);
+		    	    	var o=0;var aux=1;var aux2=15;var ii=1;
+		                $('#CalendarioFila').attr('colspan',15);
+		    	    	cambiofecha(num,dy,o,aux,aux2,ii);
+	        		}
+	        	}
+	        }
+	        if(valor==false){
+	            textomes = $("#selectmes option:selected").html();
+	            $('#meses select').change(function(){ //funcion que actua cuando ocurre un cambio en el mes
+	                fecha=new Date(fecha.getFullYear(), $("select[name=mes]").val(), 0);
+	                $("#resultado").html(fecha.toDateString());
+	                var num=fecha.toDateString().substring(8,10);
+	                var dy=fecha.toDateString().substring(0,3);
+	                var o=0;var aux=1;var aux2=15;var ii=0;
+	                $('#CalendarioFila').attr('colspan',15);
+	                cambiofecha(num,dy,o,aux,aux2,ii);
+	            });
+	        }
+	        $('.modal-body').append('<div style="padding-left:40px;" class="row col-md-12"><div class="form-group col-md-12"><h4>TRAMO</h4><h3 id="ruta" style="width:50%;margin:0 auto;display:block;" value="'+val.listarprogramacionesquincenales[0].ruta+'">'+val.listarprogramacionesquincenales[0].descriptramo+'</h3></div></div><li style="width:60px;margin:0 auto;list-style: none;" class="btnMouse1"><img src="/images/scroll.gif" class="logosedeca img-responsive"/></li><div style="margin:20px" class="row"><div id="2" style="height:600px;" class="panel-body"><h3 style="text-align:center;padding-bottom:10px;">PROGRAMACION DE TRABAJO</h3><table class="table table-bordered table-hover table2"><thead><tr><th rowspan="3">NRO ACTIVIDAD</th><th rowspan="3">SECCION</th><th colspan="2">PROGRESIVA</th><th colspan="15" id="CalendarioFila">CALENDARIO DE TRABAJO</th><th rowspan="3">CANTIDAD TRABAJO PROGRAMADO</th></tr><tr><th rowspan="3" style="width:10%">DE</th><th rowspan="3" style="width:10%">HASTA</th><th style="padding:0px;" class="dia0"></th><th style="padding:0px;" class="dia1"></th><th style="padding:0px;" class="dia2"></th><th style="padding:0px;" class="dia3"></th><th style="padding:0px;" class="dia4"></th><th style="padding:0px;" class="dia5"></th><th style="padding:0px;" class="dia6"></th><th style="padding:0px;" class="dia7"></th><th style="padding:0px;" class="dia8"></th><th style="padding:0px;" class="dia9"></th><th style="padding:0px;" class="dia10"></th><th style="padding:0px;" class="dia11"></th><th style="padding:0px;" class="dia12"></th><th style="padding:0px;" class="dia13"></th><th style="padding:0px;" class="dia14"></th><th style="padding:0px;" class="dia15"></th></tr><tr><th style="padding:0px;" class="nro0"></th><th style="padding:0px;" class="nro1"></th><th style="padding:0px;" class="nro2"></th><th style="padding:0px;" class="nro3"></th><th style="padding:0px;" class="nro4"></th><th style="padding:0px;" class="nro5"></th><th style="padding:0px;" class="nro6"></th><th style="padding:0px;" class="nro7"></th><th style="padding:0px;" class="nro8"></th><th style="padding:0px;" class="nro9"></th><th style="padding:0px;" class="nro10"></th><th style="padding:0px;" class="nro11"></th><th style="padding:0px;" class="nro12"></th><th style="padding:0px;" class="nro13"></th><th style="padding:0px;" class="nro14"></th><th style="padding:0px;" class="nro15"></th></tr></thead><tbody class="boddd"></tbody></table></div><li style="width:60px;margin:0 auto;list-style: none;" class="btnMouse2"><img src="/images/scroll.gif" class="logosedeca img-responsive"/></li><div style="margin:20px" class="row"></div><div id="3" style="height:600px;" class="panel-body"><h3 style="text-align:center;padding-bottom:10px;">REQUERIMIENTO UNIDADES DE OBRA</h3><table style="width:80%;margin: 0 auto;" class="table table-bordered table-hover scroll2 table-responsive"><thead><tr class="vehiculoSelect"><th>UNIDAD</th><th>LITROS/HORA</th></tr></thead><tbody> </tbody></table><div style="margin:60px" class="row"></div></div><li style="width:60px;margin:0 auto;list-style: none;" class="btnMouse3"><img src="/images/scroll.gif" class="logosedeca img-responsive"/></li><div style="margin:20px" class="row"></div><div id="4" class="panel-body"><h3 style="text-align:center;padding-bottom:10px;">REQUERIMIENTO MATERIALES DE OBRA</h3><table style="width:80%;margin: 0 auto;" class="table table-bordered table-hover scroll2 table-responsive"><thead><tr class="materialSelect"><th>MATERIAL</th><th>CANTIDAD</th><th>PRECIO</th></tr></thead><tbody><tr><th style="text-align:center;" colspan="3">OBSERVACIONES</th></tr><tr style="padding:0px;margin:0px;"><td colspan="3" style="padding:0px;margin:0px;"><div id="obse"></div></td></tr></tbody></table><div style="margin:60px" class="row"></div></div></div>');
+			cambiofecha(num,dy,o,aux,aux2,ii);
+			for(var j=0;j<val.listarprogramacionesquincenales[0].codisam.length;j++){
+				console.log('datos a modificar',val);
+				$('.boddd').append('<tr align="center" valign="middle" id="filaamodif'+j+'"><td value="'+val.listarprogramacionesquincenales[0].idsam[j]+'" id="idsam">'+val.listarprogramacionesquincenales[0].codisam[j]+'</td><td><input type="number" value="'+val.listarprogramacionesquincenales[0].seccion[j]+'" style="width:50px;" class="seccion"/></td><td><input type="number" value="'+val.listarprogramacionesquincenales[0].progresivade[j]+'" style="width:50px;" class="de"/></td><td><input type="number" value="'+val.listarprogramacionesquincenales[0].progresivahasta[j]+'" style="width:50px;" class="hasta"/></td></tr>');
+				for(var k=0;k<15;k++){ //introduce  checbox  X
+	            	var a=val.listarprogramacionesquincenales[0].tickeo[j].charAt(k);
+	            	if(a==1){
+						$('#filaamodif'+j+'').append('<td id="filafecha'+j+''+k+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default btn-danger">X<input type="checkbox"/></label></div></td>');
+	            	}else{
+	            		if(a==0){
+	            			$('#filaamodif'+j+'').append('<td id="filafecha'+j+''+k+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default">X<input type="checkbox"/></label></div></td>');
+	            		}
+	            	}
+	            }
+	            $('#filaamodif'+j+'').append('<td><input type="number" class="cantidad" style="width:80px;" value="'+val.listarprogramacionesquincenales[0].cantidadtrabajoprog[j]+'"/></td>');
 			}
-			var fila;
-			var valorr;
-			$('.form-control').click(function(){
-				fila=$(this).closest('td').attr('id');
-			});
-			if(estado=='registrar'){
-				$('.row h3').click(function(){
-						valorr=$(this).text();
-						$('#rojo'+fila+' input').remove();
-						$('#rojo'+fila+' span').remove();
-						$('#rojo'+fila+'').removeClass('has-error has-success has-feedback').addClass('has-success has-feedback');
-						$('#rojo'+fila+'').append('<input type="text" data-toggle="modal" data-target="#myModal" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status"><span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>');
-						$('#'+fila+' input').val('');
-						$('#'+fila+' input').val(valorr);
+			$('.btn-group label').click(function(){ //selecciona y deselecciona un checkbox
+                $(this).toggleClass( "btn-default btn-danger");
+            });
+			for(var h=0;h<val.listarprogramacionesquincenales[0].codigointerno.length;h++){
+				$('.vehiculoSelect').after('<tr value="'+val.listarprogramacionesquincenales[0].codigointerno[h]+'" id="unidad'+h+'"><td>'+val.listarprogramacionesquincenales[0].codigointerno[h]+'</td><td><input type="text" id="litro'+h+'" class="form-control" value="'+val.listarprogramacionesquincenales[0].litroshora[h]+'"></td></tr>');
+            }
+            for(var h=0;h<val.listarprogramacionesquincenales[0].descripmaterial.length;h++){
+            	$('.materialSelect').after('<tr><td id="material'+h+'" value="'+val.listarprogramacionesquincenales[0].descripmaterial[h]+'">'+val.listarprogramacionesquincenales[0].descripmaterial[h]+'</td><td><input type="text" id="cantidad'+h+'" class="form-control" value="'+val.listarprogramacionesquincenales[0].cantidad[h]+'"></td><td><input type="text" id="precio'+h+'" class="form-control" value="'+val.listarprogramacionesquincenales[0].precio[h]+'"></td></tr>');
+            }
+            $('#obse').after('<textarea style="width:100%;" rows="3" class="obser">'+val.listarprogramacionesquincenales[0].observaciones+'</textarea>');
+		
 
-						$('.form-control').click(function(){
-							fila=$(this).closest('td').attr('id');
+			$('.btnguardarcambios').click(function(){
+	            var idsamm=[]; var Unidades=[];var idvehiculos=[];var seccion=[];var checks=[];var numeros=[];var actividad=[];var equipo=[];var progresivade=[];var progresivahasta=[];var cantidadtrabajoprog=[];
+	            //actividad=valor.tramos[idtra].codsam;
+	            for(var j=0;j<16;j++){
+	                if($('.nro'+j+'').text()!=''){
+	                    numeros.push($('.nro'+j+'').text());
+	                    dias.push($('.dia'+j+'').text());
+	                }
+	            }
+	            var checki='';
+	            for(var i=0;i<val.listarprogramacionesquincenales[0].codisam.length;i++){
+	                for(var j=0;j<aux2;j++){
+	                    if($('#filafecha'+i+''+j+' label').hasClass('btn-danger')){
+	                        checki=checki+'1';
+	                    }
+	                    else{
+	                        checki=checki+'0';
+	                    }
+	                }
+	                checks.push(checki);checki='';
+	                seccion.push($('#filaamodif'+i+' .seccion').val());
+	                progresivade.push($('#filaamodif'+i+' .de').val());
+	                progresivahasta.push($('#filaamodif'+i+' .hasta').val());
+	                cantidadtrabajoprog.push($('#filaamodif'+i+' .cantidad').val());
+	                idsamm.push($('#filaamodif'+i+'>#idsam').attr('value'));
+	            }
+	            var idequiposs=[];var diass=[];var litross=[];var observaciones=[];
+	            for(var i=0;i<val.listarprogramacionesquincenales[0].codigointerno.length;i++){
+	                idequiposs.push($('#unidad'+i+'').attr('value'));
+	                litross.push($('#litro'+i+'').val());
+	                //console.log('asdasd',litross);
+	            }
+	            var materiales=[],cantidad=[],precio=[];
+	            for(var i=0;i<val.listarprogramacionesquincenales[0].descripmaterial.length;i++){
+	                materiales.push($('#material'+i+'').attr('value'));
+	                cantidad.push($('#cantidad'+i+'').val());
+	                precio.push($('#precio'+i+'').val());
+	            }
+	            observaciones.push($('.obser').text());
+	            var datos={idQuncenal:idQuncenal, observaciones:observaciones, idsamm:idsamm,progresivade:progresivade, progresivahasta:progresivahasta, cantidadtrabajoprog:cantidadtrabajoprog,checks:checks, seccion:seccion, idequiposs:idequiposs,litross:litross,materiales:materiales,cantidad:cantidad,precio:precio};
+	            console.log('los datos a modificar en pq',datos);
+	            socket2.emit('modificardatos',datos);
+	            socket2.on('respuestaupdateproquincenal',function(r){
+					if(r==true){
+						swal({
+						  title: "SE MODIFICO SATISFACTORIAMENE",
+						  text: "se modifico satisfactoriamente!",
+						  type: "success",
+						  confirmButtonColor: "#07CC32",
+						  confirmButtonText: "Aceptar!"
+						},
+						function(){
+						  location.reload();
 						});
-						var a=$('#0 input').val();var b=$('#1 input').val();var c=$('#2 input').val();var d=$('#3 input').val();var e=$('#4 input').val();var f=$('#5 input').val();var g=$('#6 input').val();var h=$('#7 input').val();
-						if((a!='')&&(b!='')&&(c!='')&&(d!='')&&(e!='')&&(f!='')&&(g!='')&&(h!='')){
-							$('.btnControlPersonalResidencia').removeAttr("disabled");
-						}	
-				});
-			}
-			else{
-				if(estado=='modificar'){
-					$('.row h3').click(function(){
-						valorr=$(this).text();
-						$('#rojo'+fila+' input').remove();
-						$('#rojo'+fila+' span').remove();
-						$('#rojo'+fila+'').removeClass('has-error has-success has-feedback').addClass('has-success has-feedback');
-						$('#rojo'+fila+'').append('<input type="text" data-toggle="modal" data-target="#myModal" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status"><span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span><span id="inputSuccess2Status" class="sr-only">(success)</span>');
-						$('#'+fila+' input').val('');
-						$('#'+fila+' input').val(valorr);
-
-						$('.form-control').click(function(){
-							fila=$(this).closest('td').attr('id');
-						});	
-						$('.btnControlPersonalResidencia').removeAttr("disabled");
-					});
-				}
-			}
-			$('.btnControlPersonalResidencia').click(function(){
-				var valor=$('.btnControlPersonalResidencia').val();
-				console.log('su valor',valor);
-				if(valor=='GUARDAR CAMBIOS'){
-						var nombres=[];cis=[]; var ocupacionTotal=[];
-						var nomRes=sessionStorage.getItem("Completo");
-						var ciRes=sessionStorage.getItem("CI");
-						nombres.push(nomRes);
-						cis.push(ciRes);
-						var idResidencia=sessionStorage.getItem("IdResidencia");
-						var ocupacion='Residente';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Encargado Campamento';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Mecanico B';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Operador Motoniveladora';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Operador B';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Operador Multiple';
-						ocupacionTotal.push(ocupacion);
-						ocupacion='Chofer';
-						ocupacionTotal.push(ocupacion);
-						ocupacionTotal.push(ocupacion);
-						ocupacionTotal.push(ocupacion);
-						var ciUs='';
-						var nomUs='';
-						var aux=0;
-						for(var i=0;i<8;i++){
-							var nomInput=$('#'+i+' input').val();
-							//var ciInput=
-							//nombres.push(nomInput);
-							
-							for(var j=nomInput.length-1;j>=0;j--){
-								//nomInput=nomInput[j];  jimena trabajadora 35
-								var ascii=nomInput[j].charCodeAt();
-								if((nomInput[j]!=' ')&&(aux<1)&&(ascii>47)&&(ascii<58)){
-									ciUs=ciUs+nomInput[j];
-								}
-								else{
-									if((nomInput[j]!=' ')||(aux==2)){
-										nomUs=nomUs+nomInput[j];
-										aux=2;
-									}
-									else{
-										aux=3;
-									}
-								}
-							}
-							aux=0;
-							var au1='';
-							var au2='';
-							for(var l=nomUs.length-1;l>=0;l--){
-								au1=au1+nomUs[l];
-							}
-							nomUs='';
-							for(var m=ciUs.length-1;m>=0;m--){
-								au2=au2+ciUs[m];
-							}
-							ciUs='';
-							nombres.push(au1);
-							cis.push(au2);
-						}
-						if(estado=='registrar'){
-							socket2.emit('registroPersonalResidencia',{ci:cis,residencia:idResidencia,ocupacionTotal:ocupacionTotal,nombres:nombres});
-						}
-						else{
-							console.log(estado);
-							if(estado=='modificar'){
-								socket2.emit('ActualizarPersonalResidencia',{ci:cis,ocupacionTotal:ocupacionTotal,nombres:nombres});
-							}
-						}
-
-					}
-				});
-		});
-		socket2.on('RespuestaRegistroUsuarios',function(r){
-			console.log(r);
-			location.reload();
-		});
-		$('.btnControlPersonalResidencia').click(function(){
-				var valor=$('.btnControlPersonalResidencia').val();
-				console.log('su valor',valor);
-				if(valor=='MODIFICAR PERSONAL'){
-					auxx='';
-					console.log('entro al click de modificar');
-					BuscadorResidencia(auxx);
-					
-				}
-		});
-	}
-	/*socket.on('RespuestaPersonalResidencia', function(v){
-		console.log(v);
-		$('#nombreResidente').text(v.nombres[0]);
-		for(var i=0; i<9;i++){
-			$('#'+i+'').text(v.nombres[i+1]);
-		}
-		$('.btnControlPersonalResidencia').click(function(){
-			var valor=$('.btnControlPersonalResidencia').val();
-			if(valor=='MODIFICAR PERSONAL'){
-				auxx='';
-				BuscadorResidencia();
-			}
-		});
-	});*/
-	$('.btnRegistroTramos').click(function(){
-		var descripcion = $('#descripcionT').val();
-		var longitud = $('#longitudT').val();
-		var costoTotal = $('#costoTotalT').val();
-		var datosT={descripcion:descripcion,longitud:longitud,costoTotal:costoTotal};
-
-		socket2.emit('RegistrarTramo',datosT);
-			$('#myModal').remove();
-			$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button></div><div class="modal-body"><div class="modal-footer"></div></div></div></div></div>');
-	});
-	socket2.on('RespuestaRegistroT',function(valor){
-		var estado=valor;
-		$('#descripcionT').val('');
-		$('#longitudT').val('');
-		$('#costoTotalT').val('');
-		if(estado=='true'){
-			$('.modal-body').append('<h1>REGISTRO EXITOSO</h1><div align="center"><img src="../images/success.png" class="img-responsive" alt="Image"></div>');
-		}
-		else{
-			$('.modal-body').append('<h1>ERROR EN EL REGISTRO</h1><div align="center"><img src="../images/warning.png" class="img-responsive" alt="Image"></div>');
-		}
-	});
-	// registrar servicios no basicos
-	$('.btnRegistroServicios').click(function(){
-		var servicios = $('#servicio').val();
-		var cantidad = $('#cantidad').val();
-		var fechaInicio = $('#fechaInicio').val();
-		var fechaFin = $('#fechaFin').val();
-		var precioUnitario = $('#precioUnitario').val();
-		var monto = $('#monto').val();
-		var partidaPresupuesto = $('#partidaPresupuesto').val();
-		var datosServ={servicios:servicios,cantidad:cantidad,fechaInicio:fechaInicio,fechaFin:fechaFin,precioUnitario:precioUnitario,monto:monto,partidaPresupuesto:partidaPresupuesto};
-
-		socket2.emit('RegistrarServicios',datosServ);
-			$('#myModal').remove();
-			$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button></div><div class="modal-body"><div class="modal-footer"></div></div></div></div></div>');
-	});
-	socket2.on('RespuestaRegistroservicios',function(valor){
-		$('#servicios').val('');
-		$('#cantidad').val('');
-		$('#fechaIn').val('');
-		$('#fechaFi').val('');
-		$('#precioUni').val('');
-		$('#monto').val('');
-		$('#partidaPres').val('');
-		if(estado=='true'){
-			$('.modal-body').append('<h1>REGISTRO EXITOSO</h1><div align="center"><img src="../images/success.png" class="img-responsive" alt="Image"></div>');
-		}
-		else{
-			$('.modal-body').append('<h1>ERROR EN EL REGISTRO</h1><div align="center"><img src="../images/warning.png" class="img-responsive" alt="Image"></div>');
-		}
-	});
-	// registrar materiales y suministros
-	$('.btnRegistroMateriales').click(function(){
-		var descripcionActivos = $('#descripcion').val();
-		var unidadMedida = $('#unidad').val();
-		var cantRequerida = $('#cantReq').val();
-		var cantExistente = $('#cantExi').val();
-		var cantSolicitada = $('#cantSoli').val();
-		var precioUnita = $('#precioUni').val();
-		var monto = $('#monto').val();
-		var partidaPresupuesto = $('#partidaPresu').val();
-		var datosMate={descripcionActivos:descripcionActivos,unidadMedida:unidadMedida,cantRequerida:cantRequerida,cantExistente:cantExistente,cantSolicitada:cantSolicitada,precioUnita:precioUnita,monto:monto,partidaPresupuesto:partidaPresupuesto};
-		socket2.emit('RegistrarMateriales',datosMate);
-			$('#myModal').remove();
-			$('body').append('<div id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" class="modal fade"><div role="document" class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true">×</span></button></div><div class="modal-body"><div class="modal-footer"></div></div></div></div></div>');
-	});
-	socket2.on('RespuestaRegistromateriales',function(valor){
-		var estado=valor;
-		$('#descripcion').val('');
-		$('#unidadMedida').val('');
-		$('#cantReq').val('');
-		$('#cantExi').val('');
-		$('#cantSol').val('');
-		$('#presUnit').val('');
-		$('#montoMa').val('');
-		$('#partidaPres').val('');
-		if(estado=='true'){
-			$('.modal-body').append('<h1>REGISTRO EXITOSO</h1><div align="center"><img src="../images/success.png" class="img-responsive" alt="Image"></div>');
-		}
-		else{
-			$('.modal-body').append('<h1>ERROR EN EL REGISTRO</h1><div align="center"><img src="../images/warning.png" class="img-responsive" alt="Image"></div>');
-		}
-	});
-
-
-	$('#btn1').click(function(){
-		$("#panel-body2").load('http://localhost:5000/EquiposAcasio #esto1');
-	})
-	$('#btn2').click(function(){
-		$("#panel-body2").load('http://localhost:5000/EquiposAcasio #esto2');
-	})
-	$('#btn3').click(function(){
-		$("#panel-body2").load('http://localhost:5000/EquiposAcasio #esto3');
-	})
-	$('#btn4').click(function(){
-		$("#panel-body2").load('http://localhost:5000/EquiposAcasio #esto4');
-	})
-	//.....................partes diarios.........................
-	//socket3.emit('DatosPartesDiarios');
-	var fecha=['12/09/2016','12/09/2016','12/09/2016'];
-	var nombresss=['alan','asd','qweqwe'];
-	var PD=['1','4','5'];
-	//console.log(valores);
-	/*socket3.emit('RespuestaPD',function(valores){
-		
-	});*/
-	var direcUrl=$(location).attr('href');
-	if(direcUrl=='http://localhost:5000/ResAcasio'){
-
-		for (var i = 0; i < fecha.length; i++) {
-			//console.log('oo',valores[i]);
-			$('.bod').append("<tr><td>"+fecha[i]+"</td><td>"+nombresss[i]+"</td><td>"+PD[i]+"</td></tr>");
-		};
-		
-		$('.bod').click(function(){
-			$(".ventanaModal").slideDown('slow');
-			//$(".desmarcado td").each(function(index){
-				//alert($(this).text());
-			//});
-		});
-	}
-	/*...........................asignacion de obras a tramos............................*/
-	$('.btnObras').click(function(){
-		window.location.href = "http://localhost:5000/obrasTramo";
-		
-	});
-	/*.............................PROGRAMACION DE TRABAJO...............................*/
-	var fecha = new Date();
-
-	var dia_semana = ["Do","Lu","Ma","Mi","Ju","Vi","Sa"];
-	var mes = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-	var month_days = [
-	'31', // ene
-	'28', // feb
-	'31', // mar
-	'30', // apr
-	'31', // may
-	'30', // jun
-	'31', // jul
-	'31', // ago
-	'30', // sept
-	'31', // oct
-	'30', // nov
-	'31' // dic
-	];
-	var dame_fecha = "Hoy " + dia_semana[fecha.getDay()] + ", " + fecha.getDate() + " de " + mes[fecha.getMonth()] + " del " + fecha.getFullYear();
-	//document.write("<p>" + dame_fecha + "</p>");
-	$('#mes').append("<tr><th>"+mes[fecha.getMonth()]+"</th></tr>");
-	for (var i = 0; i < dia_semana.length; i++){
-		//console.log(dia_semana.length);
-		if(dia_semana[i]=='Do'){
-				$('#calendarioD').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-				$('#calendarioDom').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-				//$('#calendarioFeD').append("<tr><th>"+fecha.getDate()+"</th></tr>");
-			}
-		else{
-			if(dia_semana[i]=='Lu'){
-				$('#calendarioL').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-				$('#calendarioLun').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-			}
-			else{
-				if(dia_semana[i]=='Ma'){
-					$('#calendarioM').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-					$('#calendarioMar').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-					
-				}
-				else{
-					if(dia_semana[i]=='Mi'){
-						$('#calendarioMi').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-						$('#calendarioMier').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-						$('#calendarioFeMier').append("<tr><th>"+fecha.getDate()+"</th></tr>");
 					}
 					else{
-						if(dia_semana[i]=='Ju'){
-							$('#calendarioJ').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-							$('#calendarioJue').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-						}
-						else{
-							if(dia_semana[i]=='Vi'){
-								$('#calendarioV').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-								$('#calendarioVie').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-							}
-						}
-						if(dia_semana[i]=='Sa'){
-								$('#calendarioS').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-								$('#calendarioSab').append("<tr><th>"+dia_semana[i]+"</th></tr>");
-								
-						}
+						swal({
+						  title: "REGISTRO FALLIDO",
+						  text: "existe problemas en la conexion!",
+						  type: "error",
+						  confirmButtonColor: "#DD6B55",
+						  confirmButtonText: "Aceptar!"
+						},
+						function(){
+						  location.reload();
+						});
 					}
-				}
-			}
-		}
-	};
-
+				});
+	        });
+		})
+	})
 })

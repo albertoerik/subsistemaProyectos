@@ -9,12 +9,13 @@ body {
 	font-family: sans-serif;
 	margin: 0;
 }
-.col-xs-10.col-sm-10.col-md-10.col-lg-10{
-	padding-left: 0;
-	padding-right: 0;
+div.col-md-10{
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 1133px;
 }
-.col-xs-2.col-sm-2.col-md-2.col-lg-2{
-	padding: 0;
+div.col-md-2{
+	padding-left: 30px;
 }
 .panel.panel-heading{
 	padding: 0;
@@ -25,7 +26,18 @@ div.panel-body{
 }
 h3{
 	text-align: center;
+	margin-bottom: 40px;
 }
+#tab{
+	margin-top: 50px;
+}
+.form-horizontal{
+	margin:40px;
+}
+button.btnregactividad{
+	margin-top: 20px;
+}
+
 span.label{
 	background: red;
 
@@ -48,5 +60,64 @@ nav.navbar.navbar-inverse{
 	margin-bottom: 0;
 }
 div.list-group.col-md-12{
-	padding: 1em;
+	padding: 0px;
+	padding-right: 0px;
+	padding-top: 10px;
+}
+
+
+
+.img-selected
+{
+	border: 3px dashed #099a9f;
+}
+.img
+{
+	background-color: #fff;
+	margin:5px;
+	padding:5px;
+}
+/*#input{ 
+
+	text-align: center;
+	background-color:#FFFFFF;
+	top:100px;
+	left:300px;
+	width:150px;
+	height:12px;
+	margin:0px;
+	border: 0px;
+}*/
+p{
+	text-align: center;
+	top:100px;
+	left:300px;
+	width:150px;
+	height:12px;
+	margin:0px;
+}
+div.panel-body{
+	height: 550px;
+	
+	margin-bottom: 0px;
+	padding: 0px;
+}
+div.panel.panel-info{
+	margin-bottom: 0px;
+	max-height: 100%;
+}
+.form-inline{
+	padding: 40px;
+}
+label{
+	padding: 10px;
+}
+.col-sm-offset-2.col-sm-4{
+	margin-left: 0px;
+}
+div.col-sm-offset-2.col-sm-2{
+	margin-left: 0px;
+}
+ul .listatramospulsandoo{
+	margin-left: 5em;
 }

@@ -18,6 +18,8 @@ block content
                 th NOMBRE
                 th ESTADO
                 th OBSERVACIONES
+                
+
         tbody
             -for(var i=0;i<nombres.length;i++)
                 tr(id=i align="center" valign="middle")
@@ -25,6 +27,7 @@ block content
                     td(id='nombre') #{nombres[i]}
                     td(id='estado') #{estados[i]}
                     td(id='observaciones') #{observaciones[i]}
+                    
 
     form(action="/" enctype="multipart/form-data" method="post")
         input(type="file" name="upload" multiple)

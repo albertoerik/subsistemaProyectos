@@ -1,0 +1,80 @@
+* {
+	box-sizing: border-box;
+}
+body {
+  background:url(../images/Cater.jpg);
+  padding: 0px;
+  margin: 0px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  
+}
+.logoSEDECA{
+	width: 50%;
+}
+.navbar.navbar-inverse.navbar-fixed-top{
+	padding: 1em;
+}
+.Content {
+    width:80%;
+    height:auto;
+    padding:10px;
+    background:rgba(254, 254, 254, 0.90);
+    margin: auto;
+}
+a {
+  color: #00B7FF;
+}
+
+.scroll2 tr{
+	margin:0px;
+	padding:0px;
+}
+td{
+	padding:10px;
+}
+.scroll2 input{
+	width: 100%;
+}
+.tablefecha {
+	margin:0px;
+	width:10%
+}
+.table2 tr th {
+	font-size: .6em;
+	text-align: center;
+	vertical-align: center;
+	
+}
+.table2 tr td {
+	font-size: .9em;
+	vertical-align: center;
+}
+.btn-group{
+	width: 100%;
+	height: 100%;
+}
+.boddd input{  
+	width: 100%;
+	height: 35px;
+}
+.boddd td{
+	padding: 0;
+	margin: 0;
+}
+.select{
+	border: 3px dashed #099a9f;
+}
+.vehiculoClick p{
+	text-align: center;
+}
+textarea{
+	outline: none;
+	resize:none;
+}
+.Content {
+    width:80%;
+    height:auto;
+    padding:10px;
+    background:rgba(254, 254, 254, 0.90);
+    margin: auto;
+}

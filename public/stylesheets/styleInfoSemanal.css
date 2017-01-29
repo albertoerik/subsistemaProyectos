@@ -1,0 +1,46 @@
+* {
+	box-sizing: border-box;
+}
+body {
+	position: relative;
+  	font: 20px "Lucida Grande", Helvetica, Arial, sans-serif;
+  	min-height: 100vh;
+  	width: 100%;
+  	font-family: sans-serif;
+
+}
+
+.rotat {
+  /* Something you can count on */
+    height: 120px;
+    width: 50px;
+}
+.rotat > div {
+  transform: 
+    rotate(270deg);
+  position: absolute;
+  height: 120px;
+  width: 50px;
+  top:107px;
+  margin-left: 35px;
+}
+th.rotat > div > span{
+  vertical-align:center;
+  text-align: center;
+}
+span{
+  font-size: 95%;
+  color:#fff;
+}
+h2{
+  text-align: center;
+}
+.head1{
+  background:#084C81;
+}
+.head2{
+  background:#2271AD;
+}
+td{
+  text-align: center;
+}

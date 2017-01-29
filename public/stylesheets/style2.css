@@ -8,7 +8,13 @@ body {
 	width: 100%;
 	font-family: sans-serif;
 	margin: 0;
-}   
+	
+}
+#myChart {
+	width: 90%;
+	max-width:900px;
+	margin:auto;
+}
 
 .Registro{
 	width: 40%;
@@ -177,6 +183,9 @@ div span.label{
 	color: #000;
 	font-size: 14px;
 }
+label{
+	margin-top: 0.6em;
+}
 div div div.panel-body h3{
 	margin-top: 7px;
 	border: none;
@@ -186,15 +195,14 @@ div div div.panel-body h3{
 	color: yellow;
 	margin-bottom: 0;
 }
-div .form-group{
-	margin-bottom: 0px;
-}
+
 div.col-xs-3.col-sm-3.col-md-3.col-lg-3{
 	padding: 0px;
 }
 .col-xs-12.col-sm-12.col-md-12.col-lg-12{
 	padding-left: 4px;
 	padding-right: 0px;
+
 }
 nav.navbar.navbar-inverse{
 	margin-bottom: 0px;
@@ -401,4 +409,29 @@ h2{
 	display: block;
 	font-size: .9em;
 	text-align:left;
+}
+div .input-group{
+	margin-top: 0px;
+}
+/*#columnaVehi{
+	background: rgb(34,34,34);
+	height: 680px;
+}
+#columnaVehi h3{
+	color: white;	
+}*/
+#descripcion{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+#vehi{
+	padding-left: 0px;
+	padding-right: 0px;
+}
+div .panel-title{
+	background: #A4A4A4;
+	padding: 0.5em;
+}
+div .panel-heading{
+	padding: 0px;
 }
