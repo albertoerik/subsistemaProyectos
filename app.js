@@ -681,81 +681,20 @@ io.on('connection',function(socket){
 					})
 				})
 			}else{
-				if(ultimomes!=penultimomes){
-					console.log('solo se programo la 1° quincena del mes estito');
-					estadoquince=1;
-					query.get('quincenal').where({'idprogramacionquincenal':valor}).execute(function(quin){
-						//console.log('llega',quin);
-						var listarprogramacionesquincenales=[];var codisam=[];var unidad=[];var descripcion=[];var codigointerno=[];var descripmaterial=[];
-						query.get('detallequincenal').where({'idproquincena':valor}).execute(function(detallequin){
-							query.get('equiposquincenal').where({'idproquincenal':valor}).execute(function(equipquin){
-								query.get('materialquincenal').where({'idprogramacionquincenal':valor}).execute(function(materialquin){
-									query.get('codificacionsam').execute(function(samm){
-										query.get('tramos').execute(function(tramo){
-											query.get('vehiculos').execute(function(vehi){
-												query.get('codificacionmaterial').execute(function(material){
-													var idprogramacionquincenal=[];var fechapreparacion=[];var fechade=[];var fechahasta=[]; var ruta=[]; var observaciones=[];var mesquin=[];
-													var idsam=[];var progresivade=[];var progresivahasta=[];var cantidadtrabajoprog=[];var tickeo=[];var idequipo=[];var seccion=[];
-							              		var idequipos=[];var litroshora=[];
-							              		var idmaterial=[];var cantidad=[];var precio=[];
-							              		var idtram=[];var descrip=[];
-													for(var i=0; i<quin.result.length; i++){
-														idprogramacionquincenal.push(quin.result[i].idprogramacionquincenal);fechapreparacion.push(quin.result[i].fechapreparacion);fechade.push(quin.result[i].fechade);fechahasta.push(quin.result[i].fechahasta);ruta.push(quin.result[i].ruta);observaciones.push(quin.result[i].observaciones);mesquin.push(quin.result[i].mes);
-														for(var o=0;o<tramo.result.length;o++){
-															if(ruta[i]==tramo.result[o].idtramos){
-																idtram.push(tramo.result[o].idtrbamos);descrip.push(tramo.result[o].descripcion);
-															}
-														}
-														
-													}
-													for(var j=0; j<detallequin.result.length; j++){
-									               idsam.push(detallequin.result[j].idsam);progresivade.push(detallequin.result[j].progresivade);progresivahasta.push(detallequin.result[j].progresivahasta);cantidadtrabajoprog.push(detallequin.result[j].cantidadtrabajoprog);tickeo.push(detallequin.result[j].tickeo);idequipo.push(detallequin.result[j].idequipo);seccion.push(detallequin.result[j].seccion); 
-									               //console.log('el equipo:',detalleproquincenal.result[j].idequipo);
-									            	for(var z=0;z<samm.result.length;z++){
-								                  	if(idsam[j]==samm.result[z].idsam){
-								                     	codisam.push(samm.result[z].codsam); descripcion.push(samm.result[z].descripcion);unidad.push(samm.result[z].unidad);
-								                  	}
-							               		}
-									            }
-									            for(var k=0; k<equipquin.result.length; k++){
-									               idequipos.push(equipquin.result[k].idequipo);litroshora.push(equipquin.result[k].litroshora);
-									               for(var v=0;v<vehi.result.length;v++){
-									               	if(idequipos[k]==vehi.result[v].idequipos){
-									               		codigointerno.push(vehi.result[v].codinterno);
-									               	}
-									               }
-									            }
-									            for(var l=0; l<materialquin.result.length; l++){
-									               idmaterial.push(materialquin.result[l].idmaterial);cantidad.push(materialquin.result[l].cantidad);precio.push(materialquin.result[l].precio);
-									            	for(var m=0;m<material.result.length;m++){
-									            		if(idmaterial[l]==material.result[m].idmaterialessam){
-									            			descripmaterial.push(material.result[m].descripcion);
-									            		}
-									            	}
-									            }
-									            listarprogramacionesquincenales.push({'estado':true,'codisam':codisam,'descripcion':descripcion,'unidad':unidad,'descriptramo':descrip,'idprogramacionquincenal':idprogramacionquincenal,'fechapreparacion':fechapreparacion,'fechade':fechade,'fechahasta':fechahasta,'ruta':ruta,'observaciones':observaciones,'mesquin':mesquin,'idsam':idsam,'progresivade':progresivade,'progresivahasta':progresivahasta,'cantidadtrabajoprog':cantidadtrabajoprog,'tickeo':tickeo,'seccion':seccion,'codigointerno':codigointerno,'litroshora':litroshora, 'descripmaterial':descripmaterial,'cantidad':cantidad,'precio':precio,});
-													console.log('la programacion para listar:',listarprogramacionesquincenales);
-													socket.emit('respverPQ',{'listarprogramacionesquincenales':listarprogramacionesquincenales,'estadoquince':estadoquince});
-												})
-											})
-										})
-									})
-								})
-							})
-						})
-					})
-					ultimo;
-					penultimo;
-				}else{
-					ultimo=resultado.result.length-2;
-					penultimo=resultado.result.length-3;
+				if(resultado.result.length>1){
+					var ultimo;
+					var penultimo;
+					var ultimomes;
+					var penultimomes;
+					ultimo=resultado.result.length-1;
+					penultimo=resultado.result.length-2;
+
 					ultimomes=resultado.result[ultimo].mes;
 					penultimomes=resultado.result[penultimo].mes;
-					console.log('el ultimo messs:',ultimomes);
-					console.log('el penultimo messs:',penultimomes);
-					if(ultimomes==penultimomes){
-						console.log('se programo las dos quincenas del mes');//segunda quincena
-						estadoquince=2;
+					console.log('viendoo',ultimomes, penultimomes);
+					if(ultimomes!=penultimomes){
+						console.log('solo se programo la 1° quincena del mes estito');
+						estadoquince=1;
 						query.get('quincenal').where({'idprogramacionquincenal':valor}).execute(function(quin){
 							//console.log('llega',quin);
 							var listarprogramacionesquincenales=[];var codisam=[];var unidad=[];var descripcion=[];var codigointerno=[];var descripmaterial=[];
@@ -816,6 +755,79 @@ io.on('connection',function(socket){
 								})
 							})
 						})
+						ultimo;
+						penultimo;
+					}else{
+						ultimo=resultado.result.length-1;
+						penultimo=resultado.result.length-2;
+						ultimomes=resultado.result[ultimo].mes;
+						penultimomes=resultado.result[penultimo].mes;
+						console.log('el ultimo messs:',ultimomes);
+						console.log('el penultimo messs:',penultimomes);
+						if(ultimomes==penultimomes){
+							console.log('se programo las dos quincenas del mes');//segunda quincena
+							estadoquince=2;
+							query.get('quincenal').where({'idprogramacionquincenal':valor}).execute(function(quin){
+								//console.log('llega',quin);
+								var listarprogramacionesquincenales=[];var codisam=[];var unidad=[];var descripcion=[];var codigointerno=[];var descripmaterial=[];
+								query.get('detallequincenal').where({'idproquincena':valor}).execute(function(detallequin){
+									query.get('equiposquincenal').where({'idproquincenal':valor}).execute(function(equipquin){
+										query.get('materialquincenal').where({'idprogramacionquincenal':valor}).execute(function(materialquin){
+											query.get('codificacionsam').execute(function(samm){
+												query.get('tramos').execute(function(tramo){
+													query.get('vehiculos').execute(function(vehi){
+														query.get('codificacionmaterial').execute(function(material){
+															var idprogramacionquincenal=[];var fechapreparacion=[];var fechade=[];var fechahasta=[]; var ruta=[]; var observaciones=[];var mesquin=[];
+															var idsam=[];var progresivade=[];var progresivahasta=[];var cantidadtrabajoprog=[];var tickeo=[];var idequipo=[];var seccion=[];
+									              		var idequipos=[];var litroshora=[];
+									              		var idmaterial=[];var cantidad=[];var precio=[];
+									              		var idtram=[];var descrip=[];
+															for(var i=0; i<quin.result.length; i++){
+																idprogramacionquincenal.push(quin.result[i].idprogramacionquincenal);fechapreparacion.push(quin.result[i].fechapreparacion);fechade.push(quin.result[i].fechade);fechahasta.push(quin.result[i].fechahasta);ruta.push(quin.result[i].ruta);observaciones.push(quin.result[i].observaciones);mesquin.push(quin.result[i].mes);
+																for(var o=0;o<tramo.result.length;o++){
+																	if(ruta[i]==tramo.result[o].idtramos){
+																		idtram.push(tramo.result[o].idtrbamos);descrip.push(tramo.result[o].descripcion);
+																	}
+																}
+																
+															}
+															for(var j=0; j<detallequin.result.length; j++){
+											               idsam.push(detallequin.result[j].idsam);progresivade.push(detallequin.result[j].progresivade);progresivahasta.push(detallequin.result[j].progresivahasta);cantidadtrabajoprog.push(detallequin.result[j].cantidadtrabajoprog);tickeo.push(detallequin.result[j].tickeo);idequipo.push(detallequin.result[j].idequipo);seccion.push(detallequin.result[j].seccion); 
+											               //console.log('el equipo:',detalleproquincenal.result[j].idequipo);
+											            	for(var z=0;z<samm.result.length;z++){
+										                  	if(idsam[j]==samm.result[z].idsam){
+										                     	codisam.push(samm.result[z].codsam); descripcion.push(samm.result[z].descripcion);unidad.push(samm.result[z].unidad);
+										                  	}
+									               		}
+											            }
+											            for(var k=0; k<equipquin.result.length; k++){
+											               idequipos.push(equipquin.result[k].idequipo);litroshora.push(equipquin.result[k].litroshora);
+											               for(var v=0;v<vehi.result.length;v++){
+											               	if(idequipos[k]==vehi.result[v].idequipos){
+											               		codigointerno.push(vehi.result[v].codinterno);
+											               	}
+											               }
+											            }
+											            for(var l=0; l<materialquin.result.length; l++){
+											               idmaterial.push(materialquin.result[l].idmaterial);cantidad.push(materialquin.result[l].cantidad);precio.push(materialquin.result[l].precio);
+											            	for(var m=0;m<material.result.length;m++){
+											            		if(idmaterial[l]==material.result[m].idmaterialessam){
+											            			descripmaterial.push(material.result[m].descripcion);
+											            		}
+											            	}
+											            }
+											            listarprogramacionesquincenales.push({'estado':true,'codisam':codisam,'descripcion':descripcion,'unidad':unidad,'descriptramo':descrip,'idprogramacionquincenal':idprogramacionquincenal,'fechapreparacion':fechapreparacion,'fechade':fechade,'fechahasta':fechahasta,'ruta':ruta,'observaciones':observaciones,'mesquin':mesquin,'idsam':idsam,'progresivade':progresivade,'progresivahasta':progresivahasta,'cantidadtrabajoprog':cantidadtrabajoprog,'tickeo':tickeo,'seccion':seccion,'codigointerno':codigointerno,'litroshora':litroshora, 'descripmaterial':descripmaterial,'cantidad':cantidad,'precio':precio,});
+															console.log('la programacion para listar:',listarprogramacionesquincenales);
+															socket.emit('respverPQ',{'listarprogramacionesquincenales':listarprogramacionesquincenales,'estadoquince':estadoquince});
+														})
+													})
+												})
+											})
+										})
+									})
+								})
+							})
+						}
 					}
 				}	
 			}
@@ -1079,7 +1091,7 @@ io.on('connection',function(socket){
 							for(var k=0;k<usuario.result.length;k++){
 								if(idusuario[j]==usuario.result[k].idusuario){
 									nombres_apellidos.push(usuario.result[k].nombres_apellidos);
-									console.log('namesss', nombres_apellidos);
+									//console.log('namesss', nombres_apellidos);
 								}
 							}
 						}
@@ -1093,23 +1105,23 @@ io.on('connection',function(socket){
 
 	//................asignar actividades a trabajadores........................//
 	socket.on('programacionactividadespersonal',function(aux){
-		console.log('ww',aux);
+		console.log('jojoj',aux);
 		var idproquincenal;
 		var idproquincenal2;
 		var asignartotal=[];
 		query.get("codificacionsam").execute(function(sam){
 		  query.get("quincenaldias").where({'idresidencia':aux.idresidencia,'mes':aux.mes}).execute(function(asignardias){
-			console.log(asignardias);
+	
 			if(asignardias.result.length>0){
 			  query.get("quincenaltareasper").execute(function(usertareas){
 				query.get("usuarios").execute(function(users){
 				  for(var i=0; i<asignardias.result.length; i++){
-					var usuarios,dias=asignardias.result[i].dia,samcod;
+					var usuarios=[],dias=asignardias.result[i].dia,samcod;
 					for(var j=0; j<usertareas.result.length; j++){
 					  if(asignardias.result[i].idasignaciondiasquincenal==usertareas.result[j].idasignaciondias){
 						for(var k=0; k<users.result.length; k++){
 						  if(users.result[k].idusuario==usertareas.result[j].idusuario){
-							usuarios=users.result[k].nombres_apellidos;
+							usuarios.push(users.result[k].nombres_apellidos);
 						  }
 						}
 						for(var l=0; l<sam.result.length; l++){

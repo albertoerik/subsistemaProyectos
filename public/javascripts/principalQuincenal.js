@@ -335,18 +335,19 @@ $(function(){
 
     //................asignacion actividades a trab........................//
     
-    if(window.location.pathname=='/asignacionactividades'){
-        var mes="octubre";
+    /*if(window.location.pathname=='/asignacionactividades'){
+        var mes="septiembre";
         //var idresidencia=2;
         socket.emit('programacionactividadespersonal',{'idresidencia':idresideciaactual.idresidencia,'mes':mes});
-    }
+    }*/
 
     var diatotal=0;
     socket.on('respondeprogramacionactividadespersonal',function(values){
         var dias=[],codigos=[],idsams=[];
-        console.log('werewewew',values);
+        //console.log('werewewew',values);
         $('#tableasignaruser').empty();
         $('#btnmes').removeClass('disabled');
+        //$('.btnasignacion').css('display','none');
         if(values.estado==true){
             //listar asignaciones
             for (var i = 0; i < values.asignaciontotal.length; i++) {
@@ -448,10 +449,9 @@ $(function(){
         socket.emit('usuariosparamiresidencia',{'idresidencia':idresideciaactual.idresidencia});
         socket.on('respuestausuariosparamiresidencia',function(valor){
             console.log('haberrrr', valor);
-
+            
             for(var j=0;j<valor.nombres_apellidos.length;j++){
-                //console.log('vehiculos',valor.nombres_apellidos.length);
-                $('.modal-body').append('<div id="movil'+(j+1)+'" class="col-md-4 vehiculoClick"><img src="/images/user.jpg"/><p value="'+valor.idusuario[j]+'">'+valor.nombres_apellidos[j]+'</p></div>')
+                $('.modal-body').append('<div id="movil'+(j+1)+'" class="col-md-4 personalClick"><img src="/images/user.jpg"/><p value="'+valor.idusuario[j]+'">'+valor.nombres_apellidos[j]+'</p></div>')
             }
             var aux;
             $('.filatabla').click(function(){
@@ -463,7 +463,7 @@ $(function(){
                     }
                 }
             });
-            $('.vehiculoClick').click(function(){ //selecciona y deselecciona un checkbox
+            $('.personalClick').click(function(){ //selecciona y deselecciona un checkbox
                 $(this).toggleClass( "select");
             });
             var idss='';
@@ -512,7 +512,7 @@ $(function(){
                 idusuarios.push(res);
             }  
         }
-        var datosasignaciontrab={diass:diass,actividadd:actividadd,idresidencia:idresideciaactual.idresidencia,'mes':'octubre'};
+        var datosasignaciontrab={diass:diass,actividadd:actividadd,idresidencia:idresideciaactual.idresidencia,'mes':nombremes};
         //console.log('campoinput',datosasignaciontrab);
         socket.emit('registrarasignaciontrab',datosasignaciontrab);
     });

@@ -55,7 +55,7 @@ $(function(){
 	socket2.on('resplistarPQ',function(val){
 		if(val.estado==true){
 			for(var i=0;i<val.numero.length;i++){
-				$('.contenidotabla').append('<tr id="filatm'+i+'" value="'+val.numero[i]+'"><td id="idquine'+i+'">'+val.numero[i]+'</td><td id="fechaa">'+val.fecha[i]+'</td><td id="mes">'+val.mesquincenal[i]+'</td><td>'+val.nomtramo[i]+'</td><td><button id="btnver'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success">VER</button></td><td><button id="btnmodificar'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning">MODIFICAR</button></td><td><button id="btneliminar'+i+'" type="button" class="btn btn-danger">ELIMINAR</button></td></tr>');
+				$('.contenidotabla').append('<tr id="filatm'+i+'" value="'+val.numero[i]+'"><td id="idquine'+i+'">'+val.numero[i]+'</td><td id="fechaa">'+val.fecha[i]+'</td><td id="mes">'+val.mesquincenal[i]+'</td><td>'+val.nomtramo[i]+'</td><td><button id="btnver'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success">VER</button></td><td><button id="btnmodificar'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning">MODIFICAR</button></td></tr>');
 			}
 		}else{
 			if(val.estado==false){
@@ -71,21 +71,15 @@ $(function(){
 			//console.log('el j:',j);
 			$('#btnver'+j+'').click(function(){
 				console.log('el j:',j);
-				idQuncenal=$('#idquine'+2+'').text();
+				idQuncenal=$('#idquine'+1+'').text();
 				console.log('el boton ver', idQuncenal);
 				socket2.emit('verPQ', idQuncenal);
 			})
 			$('#btnmodificar'+j+'').click(function(){
-				idQuncenal=$('#idquine'+2+'').text();
+				idQuncenal=$('#idquine'+0+'').text();
 				console.log('el boton modificar', idQuncenal);
 				socket2.emit('modificarPQ', idQuncenal);
-					
 			})
-			/*$('#btneliminar').click(function(){
-				var idQuncenal=$('#idquine').text();
-				//console.log('el boton ver', idQuncenal);
-				socket2.emit('eliminarPQ', idQuncenal);	
-			})*/
 		}
 		
         var idrusuarioactual=JSON.parse(localStorage.getItem('userinfo'));
