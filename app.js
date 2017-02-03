@@ -1113,29 +1113,80 @@ io.on('connection',function(socket){
 		  query.get("quincenaldias").where({'idresidencia':aux.idresidencia,'mes':aux.mes}).execute(function(asignardias){
 	
 			if(asignardias.result.length>0){
-			  query.get("quincenaltareasper").execute(function(usertareas){
-				query.get("usuarios").execute(function(users){
-				  for(var i=0; i<asignardias.result.length; i++){
-					var usuarios=[],dias=asignardias.result[i].dia,samcod;
-					for(var j=0; j<usertareas.result.length; j++){
-					  if(asignardias.result[i].idasignaciondiasquincenal==usertareas.result[j].idasignaciondias){
-						for(var k=0; k<users.result.length; k++){
-						  if(users.result[k].idusuario==usertareas.result[j].idusuario){
-							usuarios.push(users.result[k].nombres_apellidos);
-						  }
+				console.log('hay asignado');
+				query.get("quincenaltareasper").execute(function(usertareas){
+					query.get("usuarios").execute(function(users){
+						for(var i=0; i<asignardias.result.length; i++){
+							var usuarios=[],dias=asignardias.result[i].dia,samcod;
+							for(var j=0; j<usertareas.result.length; j++){
+								if(asignardias.result[i].idasignaciondiasquincenal==usertareas.result[j].idasignaciondias){
+									for(var k=0; k<users.result.length; k++){
+										if(users.result[k].idusuario==usertareas.result[j].idusuario){
+											usuarios.push(users.result[k].nombres_apellidos);
+										}
+									}
+									for(var l=0; l<sam.result.length; l++){
+										if(asignardias.result[i].idsam==sam.result[l].idsam){
+											samcod=sam.result[i].descripcion;
+										}
+									}
+								}
+							}
+							asignartotal.push({'dias':dias,'nombres':usuarios,'sam':samcod});
 						}
-						for(var l=0; l<sam.result.length; l++){
-						  if(asignardias.result[i].idsam==sam.result[l].idsam){
-							samcod=sam.result[i].descripcion;
-						  }
-						}
-					  }
-					}
-					asignartotal.push({'dias':dias,'nombres':usuarios,'sam':samcod});
-				  }
-				  socket.emit('respondeprogramacionactividadespersonal',{'estado':true,'asignaciontotal':asignartotal});
+						//socket.emit('respondeprogramacionactividadespersonal',{'estado':true,'asignaciontotal':asignartotal});
+						
+						query.get("quincenal").where({'mes':aux.mes}).execute(function(quincenal){
+					
+							if(quincenal.result.length>0){
+						  	 	idproquincenal2=quincenal.result[0].idprogramacionquincenal;
+
+							   if(quincenal.result.length>1){
+							   	idproquincenal2=quincenal.result[1].idprogramacionquincenal;
+									var totaltickes1=[];
+									query.get("detallequincenal").where({'idproquincena':idproquincenal2}).execute(function(detallequincenal2){
+										console.log('mensajillo',detallequincenal2);
+										query.get("quincenaltareasper").execute(function(usertareas){
+											query.get('asignacionusuarios').where({'idresidencia':aux.idresidencia}).execute(function(usuarioresidencia){
+												query.get('usuarios').execute(function(usuario){
+													for(var m=0; m<detallequincenal2.result.length; m++){
+														var samcod1,tickeo1,idsam1;
+														for(var n=0; n<sam.result.length; n++){
+														  if(detallequincenal2.result[m].idsam==sam.result[n].idsam){
+															idsam1=detallequincenal2.result[m].idsam;
+															tickeo1=detallequincenal2.result[m].tickeo;
+															samcod1=sam.result[m].descripcion;
+														  }
+														}
+														totaltickes1.push({'idsam':idsam1,'tickeo':tickeo1,'sam':samcod1})
+													}
+													var nombres_apellidos=[];var idusuario=[]; var perfil=[];var estado=[];var codequipos=[];var codinterno=[]; var tipo=[];
+													for(var u=0;u<usuarioresidencia.result.length;u++){
+														idusuario.push(usuarioresidencia.result[u].idusuario);perfil.push(usuarioresidencia.result[u].perfil);estado.push(usuarioresidencia.result[u].estado);
+														for(var k=0;k<usuario.result.length;k++){
+															if(idusuario[u]==usuario.result[k].idusuario){
+																nombres_apellidos.push(usuario.result[k].nombres_apellidos);
+															}
+														}
+													}
+													console.log('hoy',totaltickes1);
+													socket.emit('respondeprogramacionactividadespersonal',{'estado':true,'asignaciontotal':asignartotal,'estadoquincena':true,'totalsemanas':true,'totalticket1':totaltickes1,'nombres_apellidos':nombres_apellidos,'idusuario':idusuario,});
+												
+												})
+											})
+										})
+									})
+							   }else{
+							   	if(quincenal.result.length==1){
+							   		socket.emit('respondeprogramacionactividadespersonal',{'estado':true,'asignaciontotal':asignartotal,'estadoquincena':true,'totalsemanas':true,'totalticket1':totaltickes1});
+			
+							   	}
+							   }
+							}
+						})
+					});
 				});
-			  });
+				
 			}else{
 			  query.get("quincenal").where({'mes':aux.mes}).execute(function(quincenal){
 				if(quincenal.result.length>0){
