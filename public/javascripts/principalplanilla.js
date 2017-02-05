@@ -170,14 +170,14 @@ $(function(){
             
         });
 
-        /*var ctx = document.getElementById("myChart");
+        var ctx = document.getElementById("myChart");
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: ["enero", "febrero", "marzo", "abril", "mayo", "junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
                 datasets: [{
                     label: '% avance',
-                    data: [,,,,,avancedelmes,,,,avancedelmes],
+                    data: [,,,,,24,,,,avancedelmes],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',
@@ -206,7 +206,7 @@ $(function(){
                     }]
                 }
             }
-        });*/
+        });
     $('#cmd').click(function(){
         window.print();
     });
@@ -223,7 +223,8 @@ $(function(){
         var categoria = $("#selectcategoria option:selected").html();
         var valor={idusuario:idusuario, idresidencia:idresidencia, categoria:categoria, fecha:fechaaa, hora:time}
         socket.emit("reporte",valor);
-    })   
+    })
+      
 
         
         //return { columns:headers, data:data, rows:data }
@@ -251,6 +252,33 @@ $(function(){
             // });
         
     });
-    
+    socket.on('resp_registro_reporte',function(value){
+        console.log('hola',value);
+        if(value==true){
+            swal({
+              title: "ENVIO SATISFACTORIO",
+              text: "se envio reporte!",
+              type: "success",
+              confirmButtonColor: "#07CC32",
+              confirmButtonText: "Aceptar!"
+            },
+            function(){
+              //location.reload();
+              location.href="/menuproquin";
+            });
+        }else{
+            swal({
+              title: "ENVIO FALLIDO",
+              text: "no se envio reporte!",
+              type: "error",
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Aceptar!"
+            },
+            function(){
+              //location.reload();
+              location.href="/menuproquin";
+            });
+        }
+    }); 
     
 })

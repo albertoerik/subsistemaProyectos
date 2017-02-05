@@ -55,7 +55,7 @@ $(function(){
 	socket2.on('resplistarPQ',function(val){
 		if(val.estado==true){
 			for(var i=0;i<val.numero.length;i++){
-				$('.contenidotabla').append('<tr id="filatm'+i+'" value="'+val.numero[i]+'"><td id="idquine'+i+'">'+val.numero[i]+'</td><td id="fechaa">'+val.fecha[i]+'</td><td id="mes">'+val.mesquincenal[i]+'</td><td>'+val.nomtramo[i]+'</td><td><button id="btnver'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success">VER</button></td><td><button id="btnmodificar'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning">MODIFICAR</button></td></tr>');
+				$('.contenidotabla').append('<tr id="filatm'+i+'" value="'+val.numero[i]+'"><td id="idquine'+i+'" value="btnver'+i+'">'+val.numero[i]+'</td><td id="fechaa">'+val.fecha[i]+'</td><td id="mes">'+val.mesquincenal[i]+'</td><td>'+val.nomtramo[i]+'</td><td><button id="btnver'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-success">VER</button></td><td><button id="btnmodificar'+i+'" type="button" data-toggle="modal" data-target=".bs-example-modal-lg" class="btn btn-warning">MODIFICAR</button></td></tr>');
 			}
 		}else{
 			if(val.estado==false){
@@ -66,14 +66,23 @@ $(function(){
 		$('.botonnuevoPQ').click(function(){
 			location.href="/residenciaQuincenal";
 		});
-		var idQuncenal;
+		var idQuncenal, con=0;
 		for(var j=0;j<val.numero.length;j++){
-			//console.log('el j:',j);
+			console.log('el j:',j);
 			$('#btnver'+j+'').click(function(){
-				console.log('el j:',j);
-				idQuncenal=$('#idquine'+1+'').text();
-				console.log('el boton ver', idQuncenal);
-				socket2.emit('verPQ', idQuncenal);
+				con++;
+				
+				for (var i = 0; i < val.numero.length; i++) {
+					console.log('el j2:',con);
+					if(con==1){
+						idQuncenal=$('#idquine'+i+'').text();
+						console.log('el boton ver', idQuncenal);
+						socket2.emit('verPQ', idQuncenal);
+						//con=0;
+					}
+					con++;
+				}
+				
 			})
 			$('#btnmodificar'+j+'').click(function(){
 				idQuncenal=$('#idquine'+0+'').text();

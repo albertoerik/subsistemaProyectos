@@ -144,18 +144,18 @@ io.on('connection',function(socket){
 		console.log('lego',valor);
 		var reporte=Object();
 		reporte.idusuario=valor.idusuario;
-		reporte.idresidencia=valor.idresidencia;
+		//reporte.idresidencia=valor.idresidencia;
 		reporte.categoria=valor.categoria;
 		reporte.descripcion='planilla.pdf';
 		reporte.fecha=valor.fecha;
-		reporte.accion='ver reporte';
+		//reporte.accion='ver reporte';
 		reporte.hora=valor.hora;
 		query.save("reportes",reporte,(function(r){
 			if(r.affectedRows==1){
-					console.log('llego reporte!!!');
-					//socket.emit('respuestaregistroporquincenal',true);
+				console.log('llego reporte!!!');
+				socket.emit('resp_registro_reporte',true);
 			}else{
-			  //socket.emit('respuestaregistroporquincenal',false);
+				socket.emit('resp_registro_reporte',false);
 			}
 		}))
 	})
@@ -911,8 +911,8 @@ io.on('connection',function(socket){
 				ultimo;
 				penultimo;
 			}else{
-				ultimo=resultado.result.length-2;
-				penultimo=resultado.result.length-3;
+				ultimo=resultado.result.length-1;
+				penultimo=resultado.result.length-2;
 				ultimomes=resultado.result[ultimo].mes;
 				penultimomes=resultado.result[penultimo].mes;
 				console.log('el ultimo messs:',ultimomes);

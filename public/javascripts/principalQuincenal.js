@@ -353,29 +353,25 @@ $(function(){
             for (var i = 0; i < values.asignaciontotal.length; i++) {
                 $('#tableasignaruser').append('<tr><td>'+values.asignaciontotal[i].dias+'</td><td>'+values.asignaciontotal[i].sam+'</td><td>'+values.asignaciontotal[i].nombres+'</td></td></tr>');
             }
-            var aux=0;
             if(values.estadoquincena==true){
                 if(values.totalsemanas==true){
-                    aux++;
-                    if(aux==1){
-                        var dias1=[],codigos1=[],idsams1=[];
-                        var ticked=values.totalticket1[0].tickeo;
-                        for (var t = 0; t < ticked.length; t++) {
-                            for (var j = 0; j < values.totalticket1.length; j++) { //00101110101010101
-                                var cadena=values.totalticket1[j].tickeo;
-                                if(cadena[t]=='1'){
-                                    dias1.push(16+t);
-                                    codigos1.push(values.totalticket1[j].sam);
-                                    idsams1.push(values.totalticket1[j].idsam);
-                                }
+                    var dias1=[],codigos1=[],idsams1=[];
+                    var ticked=values.totalticket1[0].tickeo;
+                    for (var t = 0; t < ticked.length; t++) {
+                        for (var j = 0; j < values.totalticket1.length; j++) { //00101110101010101
+                            var cadena=values.totalticket1[j].tickeo;
+                            if(cadena[t]=='1'){
+                                dias1.push(16+t);
+                                codigos1.push(values.totalticket1[j].sam);
+                                idsams1.push(values.totalticket1[j].idsam);
                             }
                         }
-                        diatotal=diatotal+dias1.length;
-                        console.log('dias2_______-',diatotal);
-                        $('.tabla2daquincena').append('<h3>SEGUNDA QUINCENA</h3><table style="width:80%;margin:0 auto" class="table table-bordered table-hover"><thead><tr class="info"><th>DIA</th><th>ACTIVIDAD</th><th>PERSONAL</th></tr></thead><tbody id="tablaasignaruser1"></tbody></table>');
-                        for (var b = 0; b < dias1.length; b++) {
-                            $('#tablaasignaruser1').append('<tr id="fila'+b+'" value="'+idsams1[b]+'"><td id="coldia'+b+'">'+dias1[b]+'</td><td>'+codigos1[b]+'</td><td data-toggle="modal" data-target=".bs-example-modal-lg" class="filatabla" id="colpersonal'+b+'" ></td></tr>');
-                        }
+                    }
+                    diatotal=diatotal+dias1.length;
+                    console.log('dias2_______-',diatotal);
+                    $('.tabla2daquincena').append('<h3>SEGUNDA QUINCENA</h3><table style="width:80%;margin:0 auto" class="table table-bordered table-hover"><thead><tr class="info"><th>DIA</th><th>ACTIVIDAD</th><th>PERSONAL</th></tr></thead><tbody id="tablaasignaruser1"></tbody></table>');
+                    for (var b = 0; b < dias1.length; b++) {
+                        $('#tablaasignaruser1').append('<tr id="fila'+b+'" value="'+idsams1[b]+'"><td id="coldia'+b+'">'+dias1[b]+'</td><td>'+codigos1[b]+'</td><td data-toggle="modal" data-target=".bs-example-modal-lg" class="filatabla" id="colpersonal'+b+'" ></td></tr>');
                     }
                 }
             }

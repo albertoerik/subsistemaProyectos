@@ -31,5 +31,30 @@ html
 
   body
     a.avatarNombre
+    nav(class="navbar navbar-inverse").navbar-fixed-top
+        .container-fluid
+            .navbar-header
+              button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#bs-example-navbar-collapse-1')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a(href="MenuPrincipal",style='padding:0')
+                img(src="/images/logoSEDECA.png",class="logoSEDECA")
+            div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        a(href='asignacionactividades') asignar actividades
+                    li
+                        a(href='listaprogramacionquincenal?mes=septiembre') MENSAJES
+                    li
+                        a(href="#", style="margin-top:0px;" class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                            span(class="glyphicon glyphicon-user")
+                                ul(class="dropdown-menu")
+                                    li
+                                        a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
+                                    li
+                                        a(style='cursor:pointer',id='salirsistema') Salir
+
     script(src="/javascripts/bootstrap.min.js")
     block content
