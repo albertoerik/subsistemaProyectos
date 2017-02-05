@@ -224,9 +224,7 @@ $(function(){
         var valor={idusuario:idusuario, idresidencia:idresidencia, categoria:categoria, fecha:fechaaa, hora:time}
         socket.emit("reporte",valor);
     })
-      
 
-        
         //return { columns:headers, data:data, rows:data }
         
 
