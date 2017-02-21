@@ -8,7 +8,7 @@ $(function(){
     });
     var idresideciaactual=JSON.parse(localStorage.getItem('residenciainfo'));
     var idusuarioactual=JSON.parse(localStorage.getItem('userinfo'));
-    socket.emit('informesemanal',idresideciaactual.idresidencia);
+    socket.emit('informesemanal',idusuarioactual.idusuario, idresideciaactual.idresidencia);
     socket.on('insertarinformesemanal',function(values){
         console.log('larespuesta',values);
         var aux;var a=[];
@@ -173,9 +173,6 @@ $(function(){
                 ninternoequipo1.push(parseInt($('#selectvehiculo1'+i+'').val()));
                 hutilizadasequipo1.push(parseInt($('#hutilizadasequipo1'+i+'').val()));
                 observaciones.push($('#observaciones'+i+'').val());
-
-                //console.log('popopo',seccion);
-                
             }
             var datosinforme={ci:idusuarioactual.idusuario,ruta:ruta,seccion:seccion,kinicial:kinicial,kfinal:kfinal,claseper:claseper,hregularesper:hregularesper,claseper2:claseper2,hregularesper2:hregularesper2,clasematerial:clasematerial,cantmaterial:cantmaterial,clasematerial2:clasematerial2,cantmaterial2:cantmaterial2,ninternoequipo:ninternoequipo,hutilizadasequipo:hutilizadasequipo,ninternoequipo1:ninternoequipo1,hutilizadasequipo1:hutilizadasequipo1,observaciones:observaciones};
             console.log('los datos a registrar:',datosinforme);
@@ -194,6 +191,7 @@ $(function(){
                 function(){
                   location.reload();
                 });
+                
             }else{
                 swal({
                   title: "REGISTRO FALLIDO",
@@ -207,9 +205,8 @@ $(function(){
                 });
             }
         });
-        $('.btnguardarsemanal').css("display", "none");
+        //$('.btnguardarsemanal').css("display", "none");
     });
-    
     $('#cmd').click(function(){
         window.print();
     });

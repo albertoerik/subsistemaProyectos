@@ -77,11 +77,11 @@ block content
                         span H.UTILIZADAS
     button.btn.btn-primary.btnguardarsemanal(type='button',style='margin:0 auto;display:block;') GUARDAR INFORME SEMANAL
 
-    .container(style="text-align:center;")
+    .container(style="text-align:center; margin-top:10px;")
       #editor
       .btn-group
-        button.btn.btn-info.btn-sm.dropdown-toggle#cmd imprimir PDF
-        button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal') Enviar Reporte
+        button.btn.btn-info.btn-sm.dropdown-toggle#cmd(style="margin:10px;") imprimir PDF
+        button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal' style="margin:10px;") Enviar Reporte
       
       #myModal.modal.fade(role='dialog')
         .modal-dialog

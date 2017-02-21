@@ -110,6 +110,9 @@ router.get('/listaprogramacionquincenal', function(req, res, next) {
   })
   //res.render('listaprogramacionquincenal');
 });
+router.get('/principalavance',function(req, res){
+  res.render('principalavance', {title:'residencia'});
+})
 
 router.get('/Planilla',function(req ,res){
 	res.render('Planilla',{ title: 'Planillaavance'});

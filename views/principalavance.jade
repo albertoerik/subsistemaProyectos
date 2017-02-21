@@ -1,0 +1,75 @@
+extends layout2
+block content
+	h2(style='margin-top:3.5em;').mesavance 
+	.nombretramo
+
+	.Content(style="margin-top:3px;")  
+		.col-md-12
+			.btn-group
+				button.btn.btn-success.dropdown-toggle(type='button',id='btnmes' data-toggle='dropdown', aria-haspopup='true', aria-expanded='false',style="margin:0 auto;display:block") Enero
+					span.caret(style="margin-left:5px")
+				ul.dropdown-menu.meses
+					li
+						a(href='#') enero
+					li
+						a(href='#') febrero
+					li
+						a(href='#') marzo
+					li
+						a(href='#') abril
+					li
+						a(href='#') mayo
+					li
+						a(href='#') junio
+					li
+						a(href='#') julio
+					li
+						a(href='#') agosto
+					li
+						a(href='#') septiembre
+					li
+						a(href='#') octubre
+					li
+						a(href='#') noviembre
+					li
+						a(href='#') diciembre
+	.col-md-12
+		.col-md-6
+			canvas(id="myChart")
+		.col-md-6
+			canvas(id="myChart1")
+	.nombretramo2
+	.col-md-12.panel2
+		.col-md-6
+			canvas(id="myChart2")
+		.col-md-6
+			canvas(id="myChart3")
+	.container(style="text-align:center;")
+		#editor
+		.btn-group
+			button.btn.btn-info.btn-sm.dropdown-toggle#cmd(style="margin:10px;") imprimir PDF
+			button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal' style="margin:10px;") Enviar Reporte
+		#myModal.modal.fade(role='dialog')
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal') &times;
+						h4.modal-title ENVIAR REPORTES
+					.modal-body
+						form.form-horizontal(action="/" enctype="multipart/form-data" method="post")
+							.form-group
+								label.col-lg-2.control-labe CATEGORIA
+								.col-lg-10
+									select#selectcategoria.form-control(name='')
+										option(value='1') planilla de avance
+										option(value='2') informe semanal
+						
+							.form-group
+								label.col-lg-2.control-label REPORTE
+								.col-lg-10
+									input(type="file" name="upload" multiple)
+							.form-group
+								.col-lg-offset-2.col-lg-10
+									button.btn.btn-info.dropdown-toggle(type="submit" id="enviar" value="guardar") enviar
+					.modal-footer
+						button.btn.btn-default(type='button', data-dismiss='modal') Close

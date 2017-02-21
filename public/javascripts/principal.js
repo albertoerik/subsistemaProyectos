@@ -201,7 +201,7 @@ $(function(){
 	            
 	            for(var k=0;k<15;k++){ //introduce  checbox  X
 	            	var a=resp.listarprogramacionesquincenales[0].tickeo[j].charAt(k);
-	            	//console.log('hhhh',a);
+	            	console.log('hhhh',a);
 	            	if(a==1){
 						$('#filaa'+j+'').append('<td id="filafecha'+j+''+k+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default btn-danger">X<input type="checkbox"/></label></div></td>');
 	            	}else{

@@ -194,7 +194,7 @@ $(function(){
                 }
                 $('.boddd').empty();
                 for(var i=0;i<valor.tramos[idtra].codsam.length;i++){  //introducir la fila
-                    $('.boddd').append('<tr id="fila'+i+'"><td id="idsam" value="'+valor.tramos[0].idsam[i]+'">'+valor.tramos[idtra].codsam[i]+'</td><td><input type="text" class="seccion"/></td><td style="padding:0px;"><input type="text" class="de"/></td><td style="padding:0px;"><input type="text" class="hasta"/></td></td>');
+                    $('.boddd').append('<tr id="fila'+i+'"><td id="idsam" value="'+valor.tramos[idtra].idsam[i]+'">'+valor.tramos[idtra].codsam[i]+'</td><td><input type="text" class="seccion"/></td><td style="padding:0px;"><input type="text" class="de"/></td><td style="padding:0px;"><input type="text" class="hasta"/></td></td>');
                     
                     for(var j=0;j<aux2;j++){ //introduce  checbox  X
                         $('#fila'+i+'').append('<td id="filafecha'+i+''+j+'" style="padding:0px;"><div data-toggle="buttons" class="btn-group"><label style="padding-left:5px;padding-right:5px;outline: none;" class="btn btn-default">X<input type="checkbox"/></label></div></td>');

@@ -26,7 +26,31 @@ h3{
 
 #myChart {
 	width: 90%;
-	max-width:900px;
+	max-width:600px;
+	margin:auto;
+}
+#myChart1 {
+	width: 90%;
+	max-width:300px;
+	margin:auto;
+}
+
+
+#myChart2 {
+	width: 90%;
+	max-width:600px;
+	margin:auto;
+}
+#myChart3 {
+	width: 90%;
+	max-width:290px;
+	margin:auto;
+}
+
+.panel.panel-default{
+	background:rgba(196, 195, 195, 0.90);
+	width: 90%;
+	max-width:600px;
 	margin:auto;
 }
 

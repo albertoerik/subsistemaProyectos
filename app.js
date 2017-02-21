@@ -86,53 +86,8 @@ var settings={
   database:"sistemasedecauatf",
   port:""
 }
-/*var settings={
-  host:"localhost",
-  user:"root",
-  password:"",
-  database:"SubsistemaProyectos",
-  port:""
-}
-var settings1={
-  host:"localhost",
-  user:"root",
-  password:"",
-  database:"SubsistemaLocalizacion",
-  port:""
-}
-var settings2={
-  host:"localhost",
-  user:"root",
-  password:"",
-  database:"SubsistemaResidencias",
-  port:""
-}*/
-
-/*var settings={
-  host:"localhost",
-  user:"root",
-  password:"",
-  database:"subsistemaproyectos",
-  port:""
-}
-var settings1={
-  host:"192.168.43.175",
-  user:"sistemas",
-  password:"12345",
-  database:"subsistemalocalizacion",
-  port:""
-}
-var settings2={
-  host:"192.168.43.135",
-  user:"sistemas",
-  password:"12345",
-  database:"subsistemaresidencias",
-  port:""
-}*/
 
 var query=db.mysql(settings);
-//var query1=db.mysql(settings1);
-//var query2=db.mysql(settings2);
 var PORT =5000;
 var http=app.listen(PORT,function(){
 	console.log("servidor corriendo en el puerto: "+PORT);
@@ -173,7 +128,7 @@ io.on('connection',function(socket){
 	})
 
 	socket.on('NuevaActividad',function(valor){
-		//console.log('bbbbbbbb', valor);
+		console.log('bbbbbbbb', valor);
 
 		var datosActividades=Object();
 		datosActividades.idtramo=valor.idtramo;
@@ -232,6 +187,7 @@ io.on('connection',function(socket){
 										}
 								  }
 								  tramo1.push(tramo.result[i].idtramos);tramo2.push(tramo.result[i].descripcion);
+								  console.log('el con:',contador);
 								  if(contador>0){
 										tramos.push({"idtramo":tramo1,"descripcion":tramo2,'estadoactividad':true,'idsam':actividad1,'codsam':actividad2,'descripcionactividad':actividad3,'unidadactividad':actividad4,'cantidadtrab':cantidad,'materiales':material,'preciounitario':preciounitario});
 								  }
@@ -284,6 +240,142 @@ io.on('connection',function(socket){
 			}
 		});
 	});
+//..........................graficos planilla de avance............................//
+	socket.on('enviandomespararepgraficas',function(val){
+		
+		var mescli=val.mes;
+		query.get('quincenal').where({'mes':mescli}).execute(function(datquin){
+			
+			var idquincenal=[];
+			query.get('tramos').execute(function(tramo){
+				var nombtramo1=[];var nombtramo2=[];var con;var nombtramo=[];
+				for(var i=0;i<datquin.result.length;i++){
+					var ultimoreg=datquin.result.length-1; var penulreg=datquin.result.length-2;
+					console.log('por',ultimoreg);
+					if(datquin.result[penulreg].ruta!=datquin.result[ultimoreg].ruta){
+						//mostrar los dos tramos q trabajo en ese mes
+						con=2;
+						for(var j=0;j<tramo.result.length;j++){
+							if(i==0){
+								if(datquin.result[i].ruta==tramo.result[j].idtramos){
+									nombtramo1.push(tramo.result[j].descripcion);idquincenal.push(datquin.result[i].idprogramacionquincenal);
+									//console.log('debug',nombtramo1);
+								}
+							}else{
+								if(i==1){
+									if(datquin.result[i].ruta==tramo.result[j].idtramos){
+										nombtramo2.push(tramo.result[j].descripcion);idquincenal.push(datquin.result[i].idprogramacionquincenal);
+										//console.log('debug2',nombtramo2);
+									}
+								}
+							}
+						}
+						//console.log('har',idquincenal,nombtramo);
+						
+
+					}else{
+						//son iguales entonces solo mostrar el unico tramo
+						con=1;
+						console.log('solo se trabajo en un tramo en las dos quincenas=mes');
+						for(var j=0;j<tramo.result.length;j++){
+							if(datquin.result[i].ruta==tramo.result[j].idtramos){
+								nombtramo.push(tramo.result[j].descripcion);idquincenal.push(datquin.result[i].idprogramacionquincenal);
+							}
+						}
+
+					}
+					
+				}
+				if(con==2){
+					var activ1=[];var activ2=[];var volu1=[];var volu2=[];
+					query.get('detallequincenal').execute(function(detallequin){
+						//console.log('verrrr',detallequin);
+						query.get('codificacionsam').execute(function(sam){
+							query.get('volumenestrabajo').execute(function(vol){
+								for (var i=0;i<detallequin.result.length;i++){
+									for(var v=0;v<vol.result.length;v++){
+										for(var u=0;u<idquincenal.length;u++){
+											if(detallequin.result[i].idproquincena==idquincenal[u]){
+												if(vol.result[v].idproquincena==idquincenal[u]){
+													if(u==0){
+														// actividades del primer tramo
+														volu1.push(vol.result[v].cantidades);
+														
+														//activ1.push(detallequin.result[i].idsam);
+														for(var s=0;s<sam.result.length;s++){
+															if(sam.result[s].idsam==detallequin.result[i].idsam){
+																activ1.push(sam.result[s].codsam);
+															}
+														}
+													}else{
+														if(u==1){
+															//actividades del segundo tramo
+															volu2.push(vol.result[v].cantidades);
+															
+															//activ2.push(detallequin.result[i].idsam);
+															for(var s=0;s<sam.result.length;s++){
+																if(sam.result[s].idsam==detallequin.result[i].idsam){
+																	activ2.push(sam.result[s].codsam);
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+								console.log('en el 1° tramo',activ1);console.log('el vol1:',volu1);console.log('el nomb de tramo1',nombtramo1);
+								console.log('en el 2° tramo',activ2);console.log('el vol2:',volu2);
+								var tramo1=[];var tramo2=[];
+								tramo1.push(nombtramo1,activ1,volu1);tramo2.push(nombtramo2,activ2,volu2);
+								socket.emit('respdatosparagraficos',{'todo1':tramo1,'todo2':tramo2,'estado':2});
+							})
+						})
+					})
+				}else{
+
+					if(con==1){
+						var activ1=[];var volu1=[];
+						query.get('detallequincenal').execute(function(detallequin){
+							//console.log('verrrr',detallequin);
+							query.get('codificacionsam').execute(function(sam){
+								query.get('volumenestrabajo').execute(function(vol){
+									for (var i=0;i<detallequin.result.length;i++){
+										for(var v=0;v<vol.result.length;v++){
+											for(var u=0;u<idquincenal.length;u++){
+
+												if(detallequin.result[i].idproquincena==idquincenal[u]){
+													if(vol.result[v].idproquincena==idquincenal[u]){
+														volu1.push(vol.result[v].cantidades);
+														
+														//activ1.push(detallequin.result[i].idsam);
+														for(var s=0;s<sam.result.length;s++){
+															if(sam.result[s].idsam==detallequin.result[i].idsam){
+																activ1.push(sam.result[s].codsam);
+
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									//console.log('en el 1° tramo',activ1);console.log('el vol1:',volu1);console.log('el nomb de tramo1',nombtramo);
+									var tramo1=[];
+									tramo1.push(nombtramo,activ1,volu1);
+									console.log('elele',tramo1);
+									socket.emit('respdatosparagraficos',{'todo1':tramo1,'estado':1});
+								})
+							})
+						})
+					}
+				}
+			})
+		})
+	})
+
+
 
 //...........................planilla de avance...............................//
 	socket.on('listarplanilla',function(aux){
@@ -309,7 +401,7 @@ io.on('connection',function(socket){
 								}
 						  }
 						  tramo1.push(tramo.result[i].idtramos);tramo2.push(tramo.result[i].descripcion);
-						  if(contador>0){
+						  if(contador>=0){
 								tramos.push({"idtramo":tramo1,"descripcion":tramo2,'estadoactividad':true,'idsam':actividad1,'codsam':actividad2,'descripcionactividad':actividad3,'unidadactividad':actividad4,'cantidadtrab':cantidad,'preciounitario':preciounitario});
 								//console.log('bnbnb',tramos);
 						  }
@@ -1392,12 +1484,13 @@ io.on('connection',function(socket){
 
 //...........informe semanal..........................//
 	socket.on('informesemanal',function(aux){
-		var idresidencia=aux;
-		var mes='octubre';
+		var idusuario=aux.idusuario;
+		var idresidencia=aux.idresidencia;
+		var mes='enero';
 		query.get('informesemanal').execute(function(infosemanal){
 			if(infosemanal.result.length>0){
 				console.log('datos info semanal:',infosemanal);
-				query.get("quincenal").where({'idresidencia':idresidencia}).execute(function(programacionquincenal){
+				query.get("quincenal").where({'idusuario':idusuario}).execute(function(programacionquincenal){
 					//console.log('el informe:',programacionquincenal);
 					var ultimo;
 					var penultimo;
@@ -1405,10 +1498,9 @@ io.on('connection',function(socket){
 					var penultimomes;
 					ultimo=programacionquincenal.result.length-1;//1
 					penultimo=programacionquincenal.result.length-2;//0
-					
 					var ultimomes=programacionquincenal.result[ultimo].mes;
 					var penultimomes=programacionquincenal.result[penultimo].mes;
-					//console.log('kkll',penultimo);
+					
 					if(programacionquincenal.result.length>0){
 						var idproquincenal=programacionquincenal.result[penultimo].idprogramacionquincenal;
 						console.log('mnb',idproquincenal);
@@ -1418,10 +1510,10 @@ io.on('connection',function(socket){
 							query.get("detallequincenal").where_or({'idproquincena':idproquincenal}).execute(function(detallequincenal){
 								query.get("detallequincenal").where_or({'idproquincena':idproquincenal2}).execute(function(detallequincenal2){
 									query.get("codificacionsam").execute(function(sam){
-										query.get("asignacionvehiculos").where({'idresidencia':idresidencia}).execute(function(asignacionvehiculos){
+										query.get("asignacionvehiculos").where({'idusuario':idusuario}).execute(function(asignacionvehiculos){
 											query.get("vehiculos").execute(function(vehiculos){
 												var idtramopartediario=programacionquincenal.result[0].ruta;
-												query.get('partesdiarios').where({'idResidencia':idresidencia,'Tramo':idtramopartediario}).execute(function(partesdiarios){
+												query.get('partesdiarios').where({'Tramo':idtramopartediario}).execute(function(partesdiarios){
 												//console.log('el sam',partesdiarios);
 													query.get("volumenestrabajo").execute(function(volumen){
 														//console.log('los volumenes:',volumen);

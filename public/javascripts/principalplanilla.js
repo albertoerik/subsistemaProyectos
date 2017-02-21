@@ -19,7 +19,7 @@ $(function(){
         for(var t=0;t<valor.cantidades.length;t++){
             aux=valor.cantidades[t].split("|");
             a.push(aux);
-            
+            console.log('nanana',a);  
         }
 
         suma1=0;
@@ -170,7 +170,7 @@ $(function(){
             
         });
 
-        var ctx = document.getElementById("myChart");
+        /*var ctx = document.getElementById("myChart");
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -206,7 +206,8 @@ $(function(){
                     }]
                 }
             }
-        });
+        });*/
+
     $('#cmd').click(function(){
         window.print();
     });
@@ -277,6 +278,278 @@ $(function(){
               location.href="/menuproquin";
             });
         }
-    }); 
+    });
+
+    //...................reporte con graficas..............//
+    var nombremes=$('#btnmes').text();
     
+    $('.meses a').click(function(){
+        var mesactual=$(this).text();
+
+        if(nombremes!=mesactual){
+            $('#btnmes').text($(this).text());
+            $('#btnmes').append('<span style="margin-left:5px" class="caret"></span>');
+            nombremes=$(this).text();
+            //console.log('probandooo',nombremes);
+            $('.mesavance').append(nombremes);
+            //$('#btnmes').addClass('disabled');
+            socket.emit('enviandomespararepgraficas',{'mes':nombremes});
+        }
+    });
+    socket.on('respdatosparagraficos',function(valor){
+        console.log('estituuu',valor);
+        if(valor.estado==2){
+            $('.nombretramo').append('<h3>'+valor.todo1[0]+'</h3>');
+
+            var ctx = document.getElementById("myChart");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: valor.todo1[1],
+                    datasets: [{
+                        label: '% avance',
+                        data: [2],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+            var ctx = document.getElementById("myChart1");
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: valor.todo1[1],
+                    datasets: [{
+                        label: '% avance',
+                        data: [2],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+
+
+            $('.nombretramo2').append('<h3>'+valor.todo2[0]+'</h3>');
+            var ctx = document.getElementById("myChart2");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: valor.todo2[1],
+                    datasets: [{
+                        label: '% avance',
+                        data: [2,4],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+            var ctx = document.getElementById("myChart3");
+            var myChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: valor.todo2[1],
+                    datasets: [{
+                        label: '% avance',
+                        data: [2,4],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255,99,132,1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }
+                }
+            });
+
+
+        }else{
+            if(valor.estado==1){
+                //solo se trabajo en un tramo en todo el mes
+                $('.nombretramo').append('<h3>'+valor.todo1[0][0]+'</h3>');
+                $('.panel2').css('display','none');
+                var volumenes=[], aux;
+                for(var t=0;t<valor.todo1[2].length;t++){
+                    aux=valor.todo1[2][t].split("|");
+                    volumenes.push(aux);
+                }
+                var volum=[];
+                for(var f=0;f<volumenes.length;f++){
+                    for(var c=0;c<volumenes.length;c++){
+                        if(volumenes[f][c]!=""){
+                            volum.push(parseInt(volumenes[f][c]));
+                        }
+
+                    }
+                }
+                console.log('nanana',volum);
+
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: valor.todo1[1],
+                        datasets: [{
+                            label: '% avance',
+                            data: volum,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+                var ctx = document.getElementById("myChart1");
+                var myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: valor.todo1[1],
+                        datasets: [{
+                            label: '% avance',
+                            data: volum,
+                            backgroundColor: [
+                                'rgba(255, 99, 132, 0.2)',
+                                'rgba(54, 162, 235, 0.2)',
+                                'rgba(255, 206, 86, 0.2)',
+                                'rgba(75, 192, 192, 0.2)',
+                                'rgba(153, 102, 255, 0.2)',
+                                'rgba(255, 159, 64, 0.2)'
+                            ],
+                            borderColor: [
+                                'rgba(255,99,132,1)',
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        }
+    })
 })
