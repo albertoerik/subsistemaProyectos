@@ -58,6 +58,9 @@ block content
       .btn-group
         button.btn.btn-info.btn-sm.dropdown-toggle#cmd imprimir PDF
         button.btn.btn-info.btn-sm(type='button', data-toggle='modal', data-target='#myModal') Enviar Reporte
+
+        button.btn.btn-info.btn-sm.dropdown-toggle#btnpdf imp PDF
+    
       
       #myModal.modal.fade(role='dialog')
         .modal-dialog
@@ -88,3 +91,4 @@ block content
             |         
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
+    object(data='/pdfs/residencia.pdf', type='application/pdf', width='100%', height='600px')

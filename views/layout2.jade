@@ -25,7 +25,11 @@ html
 
     script(src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js")
     script(src="https://rawgit.com/someatoms/jsPDF-AutoTable/master/dist/jspdf.plugin.autotable.js")
-    
+    script(type="text/javascript").
+      var info=JSON.parse(localStorage.getItem('userinfo'));
+      if(info==null){
+        location.href="/";
+      }
 
   body
     a.avatarNombre
@@ -46,13 +50,13 @@ html
                     li
                         a(href='listaprogramacionquincenal?mes=septiembre') MENSAJES
                     li
-                        a(href="#", style="margin-top:0px;" class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                        a(href="#", style="margin-top:0px;" class="dropdown-toggle" id="avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
                             span(class="glyphicon glyphicon-user")
                                 ul(class="dropdown-menu")
                                     li
                                         a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
                                     li
-                                        a(style='cursor:pointer',id='salirsistema') Salir
+                                        a(style='cursor:pointer',id='logout') Salir
 
     script(src="/javascripts/bootstrap.min.js")
     block content

@@ -1,0 +1,57 @@
+extends layoutreportes
+
+block content
+	ul.nav.nav-tabs.nav-justified(role='tablist',style="padding-bottom:0px;padding-top:80px;background:#fff")
+		li(role='presentation') 
+			a(href='#infsem', aria-controls='infsem', role='tab', data-toggle='tab') INFORMES SEMANALES
+		li(role='presentation')
+			a(href='#plaavance', aria-controls='plaavance', role='tab', data-toggle='tab') AVANCE
+	.tab-content
+		#infsem.tab-pane.active(role='tabpanel')
+			h1(style='') INFORMES SEMANALES
+			.col-md-12
+				.btn-group
+					button.btn.btn-success.dropdown-toggle(type='button',id='btnmesinfsem' data-toggle='dropdown', aria-haspopup='true', aria-expanded='false',style="margin:0 auto;display:block") Enero
+						span.caret(style="margin-left:5px")
+					ul.dropdown-menu.meses
+						li
+							a(href='#') enero
+						li
+							a(href='#') febrero
+						li
+							a(href='#') marzo
+						li
+							a(href='#') abril
+						li
+							a(href='#') mayo
+						li
+							a(href='#') junio
+						li
+							a(href='#') julio
+						li
+							a(href='#') agosto
+						li
+							a(href='#') septiembre
+						li
+							a(href='#') octubre
+						li
+							a(href='#') noviembre
+						li
+								a(href='#') diciembres
+			table.table.table-responsive.table-hover(style="width:80%;margin:0 auto;background:#fff")
+				thead
+					tr(class="info")
+						th N°
+						th MES
+						th TRAMO
+						th 
+
+				tbody.contenidotablainsemanal
+			.mesajealerta
+			
+			button.btn.btn-primary.btninfosem IMPinfSem
+
+		#plaavance.tab-pane(role='tabpanel')
+			h1(style='') PLANILLAS DE AVANCE
+									
+	script(src="/javascripts/bootstrap.min.js")

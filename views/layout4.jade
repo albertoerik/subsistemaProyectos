@@ -10,12 +10,20 @@ html
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/Mensajes.js")
     script(src="/javascripts/parallax.js")
-    script(src="/javascripts/principalEquiposRes.js")
     script(src="/javascripts/principal.js")
     script(src="/javascripts/sweetalert.min.js")
     script(src="/javascripts/jquery.mousewheel.min.js")
     script(src="/javascripts/scroll.js")
     script(src="/javascripts/bootstrap.min.js")
+
+    script(src="/javascripts/pdfmake.min.js")
+    script(src="/javascripts/vfs_fonts.js")
+
+    script(type="text/javascript").
+      var info=JSON.parse(localStorage.getItem('userinfo'));
+      if(info==null){
+        location.href="/";
+      }
   body
     a.avatarNombre
     
@@ -32,18 +40,20 @@ html
                 div(class="collapse navbar-collapse" id="bs-example-navbar-collapse-1")
                   ul.nav.navbar-nav.navbar-right
                     li
+                      a(href='Mi_Residencia?id=2') Mi Residencia
+                    li
                       a(href='asignacionactividades') asignar actividades
                     li
-                      a(href='listaprogramacionquincenal?mes=septiembre') listar PQ
+                      a(href='listaprogramacionquincenal?mes=febrero') listar PQ
                     li
                       a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal",style="padding-left:0;padding-right:0;") MENSAJES
                     li
-                      a(href="#", class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                      a(href="#", class="dropdown-toggle" id="avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
                         span(class="glyphicon glyphicon-user")
                           ul(class="dropdown-menu")
                             li
                               a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
                             li
-                              a(style='cursor:pointer',id='salirsistema') Salir
+                              a(style='cursor:pointer',id='logout') Salir
     
     block content

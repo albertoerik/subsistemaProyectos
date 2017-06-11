@@ -2,7 +2,7 @@ extends layoutInfoSemanal
 
 block content
     h2 Informe Semanal de Actividades
-    table.table.table-bordered(style="width:95%;margin:0 auto;")
+    table.table.table-bordered#my-table(style="width:95%;margin:0 auto;")
         thead
             tr.head1
                 th(rowspan="2",style="width:20px;")
@@ -112,3 +112,4 @@ block content
             |         
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
+    button.btn.btn-primary.btnimpPQ imprimirPQ

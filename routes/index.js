@@ -114,6 +114,10 @@ router.get('/principalavance',function(req, res){
   res.render('principalavance', {title:'residencia'});
 })
 
+router.get('/reportes',function(req, res){
+  res.render('reportes', {title:'residencia'});
+})
+
 router.get('/Planilla',function(req ,res){
 	res.render('Planilla',{ title: 'Planillaavance'});
   

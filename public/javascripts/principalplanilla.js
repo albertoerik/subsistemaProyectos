@@ -1,4 +1,11 @@
 $(function(){
+    $('#logout').click(function(){
+        localStorage.removeItem('userinfo');
+        location.href="/";
+    });
+    $('#avatarNombre').text((info.nombres).split(" ")[0]);
+    $('#avatarNombre').append('<span class="glyphicon glyphicon-user"></span>');
+    
     var socket=io();
     var socket2=io();
     var aux22=JSON.parse(localStorage.getItem('userinfo'));
@@ -170,45 +177,7 @@ $(function(){
             
         });
 
-        /*var ctx = document.getElementById("myChart");
-        var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ["enero", "febrero", "marzo", "abril", "mayo", "junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
-                datasets: [{
-                    label: '% avance',
-                    data: [,,,,,24,,,,avancedelmes],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255,99,132,1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero:true
-                        }
-                    }]
-                }
-            }
-        });*/
-
-    $('#cmd').click(function(){
+    /*$('#cmd').click(function(){
         window.print();
     });
     var fecha = new Date();
@@ -225,7 +194,11 @@ $(function(){
         var valor={idusuario:idusuario, idresidencia:idresidencia, categoria:categoria, fecha:fechaaa, hora:time}
         socket.emit("reporte",valor);
     })
-
+    $('#btnpdf').click(function(){
+        window.open('reportes');
+        return false;
+        
+    })*/
         //return { columns:headers, data:data, rows:data }
         
 
@@ -298,9 +271,37 @@ $(function(){
     });
     socket.on('respdatosparagraficos',function(valor){
         console.log('estituuu',valor);
+        
         if(valor.estado==2){
             $('.nombretramo').append('<h3>'+valor.todo1[0]+'</h3>');
-
+            var volumenes1=[], volumenes2=[], aux1,aux2;
+            for(var t=0;t<valor.todo1[2].length;t++){
+                aux1=valor.todo1[2][t].split("|");
+                volumenes1.push(aux1);
+            }
+            for(var l=0;l<valor.todo2[2].length;l++){
+                aux2=valor.todo2[2][l].split("|");
+                volumenes2.push(aux2);
+            }
+            var volum1=[];var volum2=[];
+            for(var f=0;f<volumenes1.length;f++){
+                for(var c=0;c<volumenes1.length;c++){
+                    if(volumenes1[f][c]!=""){
+                        volum1.push(parseInt(volumenes1[f][c]));
+                    }
+                }
+            }
+            for(var v=0;v<volumenes2.length;v++){
+                for(var r=0;r<volumenes2.length;r++){
+                    if(volumenes2[v][r]!=""){
+                        volum2.push(parseInt(volumenes2[v][r]));
+                    }
+                }
+            }
+            var volde2quin=[];
+            volde2quin.push(volum1,volum2);
+            console.log('nanana',volde2quin);
+            
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
                 type: 'bar',
@@ -308,7 +309,7 @@ $(function(){
                     labels: valor.todo1[1],
                     datasets: [{
                         label: '% avance',
-                        data: [2],
+                        data: volde2quin[0],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -345,7 +346,7 @@ $(function(){
                     labels: valor.todo1[1],
                     datasets: [{
                         label: '% avance',
-                        data: [2],
+                        data: volde2quin[0],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -385,7 +386,7 @@ $(function(){
                     labels: valor.todo2[1],
                     datasets: [{
                         label: '% avance',
-                        data: [2,4],
+                        data: volde2quin[1],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',
@@ -422,7 +423,7 @@ $(function(){
                     labels: valor.todo2[1],
                     datasets: [{
                         label: '% avance',
-                        data: [2,4],
+                        data: volde2quin[1],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.2)',
                             'rgba(54, 162, 235, 0.2)',

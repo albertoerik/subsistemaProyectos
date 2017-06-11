@@ -5,7 +5,7 @@ block content
     .col-md-12
         form.col-md-6.col-md-offset-3(style="padding:3em")
             h2(style="margin:0;color: #f36161").subtitulo BIENVENIDO
-            
+            h4.subtitulo2(style="margin-top:1em;margin-bottom:1.5em;color: #8e8b8b;font-weight:200") Inicie Seccion si es Administrador!
             .form-group.has-error.has-feedback.formularios(id="loginnick")
                 label.control-label(for='inputError2',style="color: #a29595") NOMBRE DE USUARIO
                 input#inputError2.form-control.input-lg(type='text', aria-describedby='inputError2Status', placeholder='Ejemplo: Limbert1990')
@@ -15,5 +15,5 @@ block content
                 input#inputError2.form-control.input-lg(type='password', aria-describedby='inputError2Status', placeholder='Escriba la contraseña')
                 span.glyphicon.glyphicon-remove.form-control-feedback(aria-hidden='true')
             .control-label(style="margin:0.5em;color:#f76969;text-align:center",id="estadolog")
-            button.btn.btn-info.btn-lg.disabled.col-md-6.col-md-offset-3(type='button',id="btnEnviarLogin",data-loading-text="Verificando datos..",style="margin-top:10px") INICIAR SESION
+            button.btn.btn-info.btn-lg.col-md-6.col-md-offset-3(type='button',id="btnEnviarLogin",style="margin-top:10px" disabled) INICIAR SESION
     script(src="/javascripts/bootstrap.min.js")

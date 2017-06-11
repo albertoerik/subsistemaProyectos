@@ -1,6 +1,6 @@
 $(function(){ 
  // MI RESIDENCIA INDIVIDUAL
- 	var socket=io('http://192.168.43.175:5000');
+ 	var socket=io();
  	var info=JSON.parse(localStorage.getItem('userinfo'));
  	var aux=JSON.parse(localStorage.getItem('residenciainfo'));
  	$('#miperfil').click(function(){
@@ -16,6 +16,7 @@ $(function(){
 			location.href="/Mi_Residencia?id="+miresidencia+"";
         }else{
         	//no existe asignacion
+
         }
 		
 	});
@@ -29,11 +30,11 @@ $(function(){
 		
 	});
 
-	$('#irinformesemanal').click(function(){
+	$('#iractividades').click(function(){
     
         if(aux!=null){
         	var miinformacion=aux.idresidencia;
-			location.href="/insertarinformeSemanal";
+			location.href="/asignacionactividades";
         }else{
         	//no existe asignacion
         }
@@ -54,4 +55,11 @@ $(function(){
 		//controla que realice una modificacion para actualizar
 		$(".User input").keyup(function(){if(($('.n').val()!=$('.nomC').text()) || ($('.k').val()!=$('.nicC').text()) || ($('.i').val()!=$('.ciC').text()) || ($('.d').val()!=$('.domC').text()) || ($('.t').val()!=$('.telC').text()) || ($('.c').val()!=$('.celC').text())){$('.edit').removeClass('disabled');controlador=1;}else{$('.edit').addClass('disabled');}});
 	});
+
+	$('#logout').click(function(){
+		localStorage.removeItem('userinfo');
+		location.href="/";
+	});
+	$('#avatarNombre').text((info.nombres).split(" ")[0]);
+	$('#avatarNombre').append('<span class="glyphicon glyphicon-user"></span>');
 })

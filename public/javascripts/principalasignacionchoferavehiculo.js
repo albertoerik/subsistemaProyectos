@@ -1,5 +1,5 @@
 $(function(){
-    
+        
     var socket=io();
     var socket2=io();
     var aux=JSON.parse(localStorage.getItem('userinfo'));

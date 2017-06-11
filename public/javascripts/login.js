@@ -1,5 +1,5 @@
 $(function(){
-	var socket=io('http://192.168.43.175:5000');
+	var socket=io();
 	$("#loginnick input").keyup(function(){
 		if($(this).val().length>3){
 			$("#loginnick").removeClass('has-error');
@@ -12,73 +12,55 @@ $(function(){
 			$("#loginnick span").removeClass('glyphicon-ok');
 			$("#loginnick span").addClass('glyphicon-remove');
 		}
+		cambios();
 	});
 	$("#loginpass input").keyup(function(){
 		if($(this).val().length>3){
 			$("#loginpass").removeClass('has-error');
 			$("#loginpass").addClass('has-success');
 			$("#loginpass span").removeClass('glyphicon-remove');
-			$("#loginpass span").addClass('glyphicon-ok');
+			$("#loginpass span").addClass('glyphicon-ok');	
 		}else{
 			$("#loginpass").removeClass('has-success');
 			$("#loginpass").addClass('has-error');
 			$("#loginpass span").removeClass('glyphicon-ok');
 			$("#loginpass span").addClass('glyphicon-remove');
 		}
+		cambios();
 	});
-	$(".formularios").change(function(){
-		console.log('cambios');
+	function cambios(){
 		if(($("#loginnick").hasClass('has-success'))&&($("#loginpass").hasClass('has-success'))){
-			$("#btnEnviarLogin").removeClass('disabled');
+			$("#btnEnviarLogin").attr('disabled',false);
 		}else{
-			$("#btnEnviarLogin").addClass('disabled');
+			$("#btnEnviarLogin").attr('disabled',true);
 		}
-	});
-	var $btn;
+	}	
 	$('#btnEnviarLogin').click(function(){
-		
-		if($(this).hasClass('disabled')){
-		}else{
-			$btn = $(this).button('loading');
-			var nombre=$('#loginnick input').val();
-			var contras=$('#loginpass input').val();
-			var datos={nombre:nombre, contras:contras};
-			$(this).addClass('disabled');
-			console.log(datos);
-			socket.emit('Login',datos);
-		}	
-	});
+		$(this).attr('disabled',true);
+		var nombre=$('#loginnick input').val();
+		var contras=$('#loginpass input').val();
+		var datos={nombre:nombre, contras:contras};
+		socket.emit('Login',datos);});
 	socket.on('LoginRespuesta',function(rows){
-		console.log('ffff', rows);
+		console.log('aaa', rows);
 		if(rows.estado==true){
-			
-			if(rows.usuario[0].cargo=='Encargado de Residencia'){
-				if(rows.estadoasignacion==true){
-					localStorage.setItem('userinfo', JSON.stringify(rows.usuario[0]));
-					localStorage.setItem('residenciainfo', JSON.stringify(rows.residencia[0]));
-					location.href="MenuPrincipal";
-				}
-				else{
-					localStorage.setItem('userinfo', JSON.stringify(rows.usuario[0]));
-					location.href="MenuPrincipal";
-				}
+			localStorage.setItem('userinfo',JSON.stringify(rows.usuario[0]));
+			if(rows.estadoasignacion!=false){
+				localStorage.setItem('residenciainfo',JSON.stringify(rows.residencia[0]))
 			}
-			else{
-				$('.error').text('No corresponde acceder al sistema');
-				$('.errorLogo').slideDown('fast');
-			}
+			location.href="MenuPrincipal";
 		}else{
-			$('.error').text('NO EXISTE EL USUARIO');
-			$('.errorLogo').slideDown('fast');
+			$("#loginnick input").val('');
+			$("#loginpass input").val('');
+			$("#loginpass").removeClass('has-success');
+			$("#loginpass").addClass('has-error');
+			$("#loginpass span").removeClass('glyphicon-ok');
+			$("#loginpass span").addClass('glyphicon-remove');
+			$("#loginnick").removeClass('has-success');
+			$("#loginnick").addClass('has-error');
+			$("#loginnick span").removeClass('glyphicon-ok');
+			$("#loginnick span").addClass('glyphicon-remove');
+			$('#estadolog').text('Nombre de usuario o contraseña incorrectos');
 		}
-		
-		// 	
-		// 	sessionStorage.setItem('CI',ci);
-		// 	
-		// }
-		// else{
-		// 	$('.error').text('verifique sus datos')
-		// 	$('.errorLogo').slideDown('fast');
-		// }
 	});
 })

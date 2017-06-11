@@ -14,6 +14,11 @@ html
     script(src="/javascripts/principal.js")
     script(src="/javascripts/principalasignacionchoferavehiculo.js")
     script(src="/javascripts/sweetalert.min.js")
+    script(type="text/javascript").
+      var info=JSON.parse(localStorage.getItem('userinfo'));
+      if(info==null){
+        location.href="/";
+      }
   body
     .row
         nav#mainNav.navbar.navbar-inverse.navbar-fixed-top
@@ -29,7 +34,7 @@ html
             #bs-example-navbar-collapse-1.collapse.navbar-collapse
               ul.nav.navbar-nav.navbar-right
                 li
-                  a(href='Residencias') Residencias
+                  a(href='menuproquin') Planificacion
                 li
                   a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="false", aria-expanded="true") Usuarios
                             ul(class="dropdown-menu")
@@ -40,22 +45,16 @@ html
                 li
                   a(href='equipos') Vehiculos
                 li
-                  a(href="#", class="dropdown-toggle", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") Ubicacion
-                                  ul(class="dropdown-menu")
-                                    li
-                                      a(href="Principal_TiempoReal") Localización Usuarios
-                                    li
-                                      a(href="#") Localizacion Vehiculos
-                li
-                  a(href='sam') SAM
+                  a(href="asignacionactividades") Asignar actividades
+
                 li
                   a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal") Mensajes
                 li
-                  a(href="#", class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
-                                  span(class="glyphicon glyphicon-user")
-                                    ul(class="dropdown-menu")
-                                      li
-                                        a(href="#", data-toggle="modal", class="info", data-target="#modalUser") Mi Perfil
-                                      li
-                                        a(href="#") Salir
+                  a(href="#", class="dropdown-toggle" id="avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                    span(class="glyphicon glyphicon-user")
+                      ul(class="dropdown-menu")
+                        li
+                          a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
+                        li
+                          a(style='cursor:pointer',id='logout') Salir
     block content

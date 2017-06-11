@@ -93,7 +93,65 @@ var http=app.listen(PORT,function(){
 	console.log("servidor corriendo en el puerto: "+PORT);
 });
 var io=socket(http);
-io.on('connection',function(socket){	
+io.on('connection',function(socket){
+
+//................LOGIN................................//
+	socket.on('Login',function(data){
+    console.log(data.nombre,data.contras);
+    query.get("usuarios").where({"nick":data.nombre,"pass":data.contras}).execute(function(v){ 
+      if(v.result.length==1){
+        var usuario=[];
+        usuario.push({"idusuario":v.result[0].idusuario,"nombres":v.result[0].nombres_apellidos,'nick':v.result[0].nick,'ci':v.result[0].ci,'cargo':v.result[0].cargo,'domicilio':v.result[0].domicilio,'telefono':v.result[0].telefono,'celular':v.result[0].celular});
+        if(v.result[0].cargo!='Encargago de Residencia'){
+          var fecha = new Date();var ano = fecha.getFullYear();
+          query.get("residencias").where({'año':ano}).execute(function(residenciaño){
+
+            if(residenciaño.result.length>0){
+              query.get("asignacionusuarios").where({'idusuario':v.result[0].idusuario}).execute(function(asignacion){
+                if(asignacion.result.length>0){
+                  var residencia=[];var contador=0;
+                  var idresidencia,nombreresidencia,estadoresidencia;
+                  for (var j=0;j<asignacion.result.length;j++){
+                    for (var i=0;i<residenciaño.result.length;i++){ //2
+                      if(residenciaño.result[i].idresidencias==asignacion.result[j].idresidencia){
+                        contador=contador+1;
+                        idresidencia=residenciaño.result[i].idresidencias;estadoresidencia=residenciaño.result[i].estado;nombreresidencia=residenciaño.result[i].nombre;
+                      } 
+                    }
+                  }
+                  if(contador==1){
+                    if(estadoresidencia=='habilitado'){
+                      console.log('todo okey');
+                      residencia.push({"idresidencia":idresidencia,"nombreresidencia":nombreresidencia,'estadoresidencia':true});
+                    }else{
+                      console.log('residencia desabilitada');
+                      residencia.push({"idresidencia":idresidencia,"nombreresidencia":nombreresidencia,'estadoresidencia':false});
+                    }
+                    socket.emit('LoginRespuesta',{"estado":true,"usuario":usuario,"estadoasignacion":true,"residencia":residencia});
+                  }else{
+                    console.log('no estas asignado en ninguna residencia esta gestion');
+                    socket.emit('LoginRespuesta',{"estado":true,"usuario":usuario,"estadoasignacion":false});
+                  }
+                }else{
+                  console.log('no estas asignado en ninguna residencia1');
+                  socket.emit('LoginRespuesta',{"estado":true,"usuario":usuario,"estadoasignacion":false});
+                }
+              });
+            }else{
+              console.log('no estas asignado en ninguna residencia2');
+              socket.emit('LoginRespuesta',{"estado":true,"usuario":usuario,"estadoasignacion":false});
+            }
+          });
+        }else{
+          socket.emit('LoginRespuesta',{"estado":true,"usuario":usuario});
+        }
+      }else{
+        console.log('no hay usuario');
+        socket.emit('LoginRespuesta',{"estado":false});
+      }
+    });
+  });
+
 //.................reportes...........................//
 	socket.on('reporte', function(valor){
 		console.log('lego',valor);
@@ -188,7 +246,7 @@ io.on('connection',function(socket){
 								  }
 								  tramo1.push(tramo.result[i].idtramos);tramo2.push(tramo.result[i].descripcion);
 								  console.log('el con:',contador);
-								  if(contador>0){
+								  if(contador>=0){
 										tramos.push({"idtramo":tramo1,"descripcion":tramo2,'estadoactividad':true,'idsam':actividad1,'codsam':actividad2,'descripcionactividad':actividad3,'unidadactividad':actividad4,'cantidadtrab':cantidad,'materiales':material,'preciounitario':preciounitario});
 								  }
 								  else{
@@ -251,7 +309,7 @@ io.on('connection',function(socket){
 				var nombtramo1=[];var nombtramo2=[];var con;var nombtramo=[];
 				for(var i=0;i<datquin.result.length;i++){
 					var ultimoreg=datquin.result.length-1; var penulreg=datquin.result.length-2;
-					console.log('por',ultimoreg);
+					//console.log('por',ultimoreg);
 					if(datquin.result[penulreg].ruta!=datquin.result[ultimoreg].ruta){
 						//mostrar los dos tramos q trabajo en ese mes
 						con=2;
@@ -282,7 +340,7 @@ io.on('connection',function(socket){
 								nombtramo.push(tramo.result[j].descripcion);idquincenal.push(datquin.result[i].idprogramacionquincenal);
 							}
 						}
-
+						
 					}
 					
 				}
@@ -364,7 +422,7 @@ io.on('connection',function(socket){
 									//console.log('en el 1° tramo',activ1);console.log('el vol1:',volu1);console.log('el nomb de tramo1',nombtramo);
 									var tramo1=[];
 									tramo1.push(nombtramo,activ1,volu1);
-									console.log('elele',tramo1);
+									//console.log('elele',tramo1);
 									socket.emit('respdatosparagraficos',{'todo1':tramo1,'estado':1});
 								})
 							})
@@ -542,7 +600,7 @@ io.on('connection',function(socket){
 //..........................control de estados PQ.........................................//
 	socket.on('manipulacionestados',function(){
 		query.get('quincenal').execute(function(resultado){
-			//console.log('jjj',resultado.result.length);
+			console.log('jjj',resultado.result.length);
 			var mes=[];
 			var ultimo;
 			var penultimo;
@@ -672,9 +730,11 @@ io.on('connection',function(socket){
 			}
 		}));
 	});
-//..................listar PQ en menuproquin...............................//
-	socket.on('listarPQ',function(){
-	  	query.get('quincenal').execute(function(quincenal){
+//................................listar PQ en menuproquin..................................//
+	socket.on('listarPQ',function(val){
+		//console.log('el me', val.mes);
+	  	query.get('quincenal').where({'mes':val.mes}).execute(function(quincenal){
+
 	  		query.get('tramos').execute(function(tramos){
 			   if(quincenal.result.length>0){
 			    	var fepreparacion=[]; var mesquincenal=[], numero=[], tramo=[], nomtramo=[];
@@ -696,7 +756,487 @@ io.on('connection',function(socket){
 	  	})
 	})
 
-//............................ver programacion quincenal ............................................//
+//...........................pdf Programacion quincenal..............................................//
+	socket.on('pdfPQ',function(val){
+		var estadoquin;
+		query.get('quincenal').where({'mes':val.mes}).execute(function(quindemes){
+			var ultimo=quindemes.result.length-1;
+			var penultimo=quindemes.result.length-2;
+			if(quindemes.result.length<=2){
+
+				if(val.idpq <= quindemes.result[penultimo].idprogramacionquincenal){
+					console.log('1° quincena');
+					estadoquin=1;
+					query.get('quincenal').where({'idprogramacionquincenal':val.idpq}).execute(function(quin){
+						var tbody=[], tbodyequi=[],tbodymate=[];
+						var todopq=[], todoequi=[], todomat=[];
+						var mesquin=[];
+						//var codisam=[];var unidad=[];var descripcion=[];var codigointerno=[];var descripmaterial=[];
+						query.get('detallequincenal').where({'idproquincena':val.idpq}).execute(function(detallequin){
+							query.get('equiposquincenal').where({'idproquincenal':val.idpq}).execute(function(equipquin){
+								query.get('materialquincenal').where({'idprogramacionquincenal':val.idpq}).execute(function(materialquin){
+									query.get('codificacionsam').execute(function(samm){
+										query.get('tramos').execute(function(tramo){
+											query.get('vehiculos').execute(function(vehi){
+												query.get('codificacionmaterial').execute(function(material){
+													var idprogramacionquincenal=[];var fechapreparacion=[];var fechade=[];var fechahasta=[]; var ruta=[]; var observaciones=[];
+													var idsam=[];
+													//var progresivade=[];var progresivahasta=[];var cantidadtrabajoprog=[];var tickeo=[];var idequipo=[];var seccion=[];
+							              		var idequipos=[];
+							              		var idmaterial=[];var cantidad=[];var precio=[];
+							              		var idtram=[];var descrip=[];
+													for(var i=0; i<quin.result.length; i++){
+														idprogramacionquincenal.push(quin.result[i].idprogramacionquincenal);fechapreparacion.push(quin.result[i].fechapreparacion);fechade.push(quin.result[i].fechade);fechahasta.push(quin.result[i].fechahasta);ruta.push(quin.result[i].ruta);observaciones.push(quin.result[i].observaciones);mesquin=quin.result[i].mes;
+														for(var o=0;o<tramo.result.length;o++){
+															if(ruta[i]==tramo.result[o].idtramos){
+																idtram.push(tramo.result[o].idtrbamos);descrip.push(tramo.result[o].descripcion);
+															}
+														}
+														
+													}
+													for(var j=0; j<detallequin.result.length; j++){
+									               idsam.push(detallequin.result[j].idsam);
+									               //progresivade.push(detallequin.result[j].progresivade);progresivahasta.push(detallequin.result[j].progresivahasta);cantidadtrabajoprog.push(detallequin.result[j].cantidadtrabajoprog);tickeo.push(detallequin.result[j].tickeo);idequipo.push(detallequin.result[j].idequipo);seccion.push(detallequin.result[j].seccion); 
+									               
+									            	for(var z=0;z<samm.result.length;z++){
+								                  	if(idsam[j]==samm.result[z].idsam){
+								                     	//codisam.push(samm.result[z].codsam); unidad.push(samm.result[z].unidad);
+												            tbody.push(samm.result[z].codsam);
+												            tbody.push(detallequin.result[j].seccion);
+												            tbody.push(samm.result[z].unidad);
+												            tbody.push(detallequin.result[j].progresivade);
+												            tbody.push(detallequin.result[j].progresivahasta);
+												            //tbody.push(detallequin.result[j].tickeo);
+												            var cadena=detallequin.result[j].tickeo;
+				    											
+															   for(var i=0;i<cadena.length;i++){
+															    	var caracter=cadena.charAt(i);
+															    	if(caracter==1){
+															    		tbody.push('X');
+															    		
+															    	}else{
+															    		if(caracter==0){
+															    			tbody.push(' ');
+															    		}
+															    	}
+															   }
+															   tbody.push(' ');
+												            tbody.push(detallequin.result[j].cantidadtrabajoprog);
+												            todopq.push(tbody);
+									               		tbody=[];
+								                  	}
+							               		}
+									            }
+									            for(var k=0; k<equipquin.result.length; k++){
+									               idequipos.push(equipquin.result[k].idequipo);
+									               for(var v=0;v<vehi.result.length;v++){
+									               	if(idequipos[k]==vehi.result[v].idequipos){
+									               		tbodyequi.push(vehi.result[v].codinterno);
+									               		tbodyequi.push(equipquin.result[k].litroshora);
+									               		todoequi.push(tbodyequi);
+									               		tbodyequi=[];
+									               	}
+									               }
+									            }
+									            for(var l=0; l<materialquin.result.length; l++){
+									               idmaterial.push(materialquin.result[l].idmaterial);
+									            	for(var m=0;m<material.result.length;m++){
+									            		if(idmaterial[l]==material.result[m].idmaterialessam){
+									            			tbodymate.push(material.result[m].descripcion);
+									            			tbodymate.push(materialquin.result[l].cantidad);
+									            			tbodymate.push(materialquin.result[l].precio);
+									            			todomat.push(tbodymate);
+									               		tbodymate=[];
+									            		}
+									            	}
+									            }
+									            //console.log('pruu',todopq);
+													socket.emit('resppdfPQ',{'PQ':todopq,'equiPQ':todoequi,'materPQ':todomat,'estadoquin':estadoquin,'mesquin':mesquin});
+												})
+											})
+										})
+									})
+								})
+							})
+						})
+					})
+				}else{
+					if(val.idpq>=quindemes.result[penultimo].idprogramacionquincenal){
+						console.log('2° quincena');
+						estadoquin=2;
+						query.get('quincenal').where({'idprogramacionquincenal':val.idpq}).execute(function(quin){
+							var tbody=[], tbodyequi=[],tbodymate=[];
+							var todopq=[], todoequi=[], todomat=[];
+							var mesquin=[];
+							//var codisam=[];var unidad=[];var descripcion=[];var codigointerno=[];var descripmaterial=[];
+							query.get('detallequincenal').where({'idproquincena':val.idpq}).execute(function(detallequin){
+								query.get('equiposquincenal').where({'idproquincenal':val.idpq}).execute(function(equipquin){
+									query.get('materialquincenal').where({'idprogramacionquincenal':val.idpq}).execute(function(materialquin){
+										query.get('codificacionsam').execute(function(samm){
+											query.get('tramos').execute(function(tramo){
+												query.get('vehiculos').execute(function(vehi){
+													query.get('codificacionmaterial').execute(function(material){
+														var idprogramacionquincenal=[];var fechapreparacion=[];var fechade=[];var fechahasta=[]; var ruta=[]; var observaciones=[];
+														var idsam=[];
+														//var progresivade=[];var progresivahasta=[];var cantidadtrabajoprog=[];var tickeo=[];var idequipo=[];var seccion=[];
+								              		var idequipos=[];
+								              		var idmaterial=[];var cantidad=[];var precio=[];
+								              		var idtram=[];var descrip=[];
+														for(var i=0; i<quin.result.length; i++){
+															idprogramacionquincenal.push(quin.result[i].idprogramacionquincenal);fechapreparacion.push(quin.result[i].fechapreparacion);fechade.push(quin.result[i].fechade);fechahasta.push(quin.result[i].fechahasta);ruta.push(quin.result[i].ruta);observaciones.push(quin.result[i].observaciones);mesquin=quin.result[i].mes;
+															for(var o=0;o<tramo.result.length;o++){
+																if(ruta[i]==tramo.result[o].idtramos){
+																	idtram.push(tramo.result[o].idtrbamos);descrip.push(tramo.result[o].descripcion);
+																}
+															}
+															
+														}
+														for(var j=0; j<detallequin.result.length; j++){
+										               idsam.push(detallequin.result[j].idsam);
+										               //progresivade.push(detallequin.result[j].progresivade);progresivahasta.push(detallequin.result[j].progresivahasta);cantidadtrabajoprog.push(detallequin.result[j].cantidadtrabajoprog);tickeo.push(detallequin.result[j].tickeo);idequipo.push(detallequin.result[j].idequipo);seccion.push(detallequin.result[j].seccion); 
+										               
+										            	for(var z=0;z<samm.result.length;z++){
+									                  	if(idsam[j]==samm.result[z].idsam){
+									                     	//codisam.push(samm.result[z].codsam); unidad.push(samm.result[z].unidad);
+													            tbody.push(samm.result[z].codsam);
+													            tbody.push(detallequin.result[j].seccion);
+													            tbody.push(samm.result[z].unidad);
+													            tbody.push(detallequin.result[j].progresivade);
+													            tbody.push(detallequin.result[j].progresivahasta);
+													            //tbody.push(detallequin.result[j].tickeo);
+													            var cadena=detallequin.result[j].tickeo;
+					    
+																   for(var i=0;i<cadena.length;i++){
+																    	var caracter=cadena.charAt(i);
+																    	if(caracter==1){
+																    		tbody.push('X');
+																    		
+																    	}else{
+																    		if(caracter==0){
+																    			tbody.push(' ');
+																    		}
+																    	}
+																   }
+													            tbody.push(detallequin.result[j].cantidadtrabajoprog);
+													            console.log('das',tbody.length);
+													            todopq.push(tbody);
+										               		tbody=[];
+									                  	}
+								               		}
+										            }
+										            for(var k=0; k<equipquin.result.length; k++){
+										               idequipos.push(equipquin.result[k].idequipo);
+										               for(var v=0;v<vehi.result.length;v++){
+										               	if(idequipos[k]==vehi.result[v].idequipos){
+										               		tbodyequi.push(vehi.result[v].codinterno);
+										               		tbodyequi.push(equipquin.result[k].litroshora);
+										               		todoequi.push(tbodyequi);
+										               		tbodyequi=[];
+										               	}
+										               }
+										            }
+										            for(var l=0; l<materialquin.result.length; l++){
+										               idmaterial.push(materialquin.result[l].idmaterial);
+										            	for(var m=0;m<material.result.length;m++){
+										            		if(idmaterial[l]==material.result[m].idmaterialessam){
+										            			tbodymate.push(material.result[m].descripcion);
+										            			tbodymate.push(materialquin.result[l].cantidad);
+										            			tbodymate.push(materialquin.result[l].precio);
+										            			todomat.push(tbodymate);
+										               		tbodymate=[];
+										            		}
+										            	}
+										            }
+										            //console.log('pruu',todopq);
+														socket.emit('resppdfPQ',{'PQ':todopq,'equiPQ':todoequi,'materPQ':todomat,'estadoquin':estadoquin,'mesquin':mesquin});
+													})
+												})
+											})
+										})
+									})
+								})
+							})
+						})
+					}
+				}
+			}
+		})
+	})
+
+
+//........................listar inf sem..................................................//
+	socket.on('listarinfsem',function(val){
+	  	query.get('quincenal').where({'mes':val.mes}).execute(function(quincenal){
+	  		var tickeoo=[];
+	  		query.get('tramos').execute(function(tramos){
+			   if(quincenal.result.length>0){
+			    	var mesquincenal=[], numero=[], tramo=[], nomtramo=[], tickeo=[];
+			    	for(var i=0;i<quincenal.result.length;i++){
+			    		mesquincenal.push(quincenal.result[i].mes);numero.push(quincenal.result[i].idprogramacionquincenal);tramo.push(quincenal.result[i].ruta);
+			    		
+		    			for(var o=0;o<tramos.result.length;o++){
+							if(tramo[i]==tramos.result[o].idtramos){
+			      			nomtramo.push(tramos.result[o].descripcion);
+		      			}
+		      		}
+			    	}
+			    	query.get('detallequincenal').execute(function(detqui){
+			    		for(var k=0;k<detqui.result.length;k++){
+			    			for (var i = 0; i < numero.length; i++) {
+			    				if(numero[i]==detqui.result[k].idproquincena){
+			    					tickeoo.push(detqui.result[k].tickeo);
+				    			}
+			    			}
+				    		
+				      }
+
+				      socket.emit('resplistarinfsem', {'estado':true, 'mesquincenal':mesquincenal, 'numero':numero, 'nomtramo':nomtramo,'tickeoo':tickeoo});
+			    	})
+			    	//console.log('test',numero);
+			    	
+			   }else{
+			   	socket.emit('resplistarinfsem', {'estado':false});
+			   	console.log('no hay nigun quincenal para listar inf sem');
+			   }
+			})
+	  	})
+	})
+
+//.............................pdf inf sem..............................................//
+	socket.on('pdfinfsem',function(val){
+		console.log('llego',val);
+		if(val.num==1){ // primera semana
+
+
+			query.get('quincenal').where({'idprogramacionquincenal':val.idpq1}).execute(function(quin){
+				var tbody=[], tbodyequi=[], tbodymate=[], tper=[];
+				var todopq=[], todoequi=[], todomater=[];
+				query.get('volumenestrabajo').where({'idproquincena':val.idpq1}).execute(function(volu){
+					query.get('detallequincenal').where({'idproquincena':val.idpq1}).execute(function(detallequin){
+						query.get('equiposquincenal').where({'idproquincenal':val.idpq1}).execute(function(equipquin){
+							query.get('materialquincenal').where({'idprogramacionquincenal':val.idpq1}).execute(function(materialquin){
+								query.get('codificacionsam').execute(function(samm){
+									query.get('tramos').execute(function(tramo){
+										query.get('vehiculos').execute(function(vehi){
+											query.get('codificacionmaterial').execute(function(material){
+												query.get('quincenaldias').execute(function(quindias){
+													query.get('quincenaltareasper').execute(function(tareasper){
+														query.get('asignacionusuarios').execute(function(asigusua){
+															query.get('codificacionpersonal').execute(function(codpersonal){
+																
+																var idprogramacionquincenal=[]; var ruta=[]; var observaciones=[], mesquin;
+																var idsam=[];
+										              		var idequipos=[];
+										              		var idmaterial=[];var cantidad=[];var precio=[];
+										              		var idtram=[];var descrip=[];
+
+										              		var idasigdias15=[], diasmes=[];
+
+										              		for(var i=0; i<quin.result.length; i++){
+																	idprogramacionquincenal.push(quin.result[i].idprogramacionquincenal);ruta.push(quin.result[i].ruta);observaciones.push(quin.result[i].observaciones); mesquin=quin.result[i].mes;
+																	for(var o=0;o<tramo.result.length;o++){
+																		if(ruta[i]==tramo.result[o].idtramos){
+																			idtram.push(tramo.result[o].idtrbamos);descrip.push(tramo.result[o].descripcion);
+																		}
+																	}
+																}
+																var volumen=[];
+																query.get('partesdiarios').where({'Tramo':ruta}).execute(function(partesdiarios){
+																	query.get('asignacionvehiculos').execute(function(asigvehi){
+																		query.get('vehiculos').execute(function(vehi){
+																			/*for(var vo=0;vo<volu.result.length;vo++){
+																				volumen.push(volu.result[vo].cantidades);
+																				//var volumenes=volu.result[vo].cantidades;
+																			}*/
+																			//console.log('los volumenes',volumen);
+																			/*for(var j=0; j<detallequin.result.length; j++){
+															               idsam.push(detallequin.result[j].idsam);
+															               //progresivade.push(detallequin.result[j].progresivade);progresivahasta.push(detallequin.result[j].progresivahasta);cantidadtrabajoprog.push(detallequin.result[j].cantidadtrabajoprog);tickeo.push(detallequin.result[j].tickeo);idequipo.push(detallequin.result[j].idequipo);seccion.push(detallequin.result[j].seccion); 
+															               
+															            	for(var z=0;z<samm.result.length;z++){
+														                  	if(idsam[j]==samm.result[z].idsam){
+														                     	//codisam.push(samm.result[z].codsam); unidad.push(samm.result[z].unidad);
+																		            tbody.push(samm.result[z].codsam);
+																		            tbody.push(detallequin.result[j].seccion);
+																		            tbody.push(samm.result[z].unidad);
+																		            tbody.push(detallequin.result[j].progresivade);
+																		            tbody.push(detallequin.result[j].progresivahasta);
+																		            //tbody.push(detallequin.result[j].tickeo);
+																		            var cadena=detallequin.result[j].tickeo;
+
+																		            tbody.push(detallequin.result[j].cantidadtrabajoprog);
+																		            todopq.push(tbody);
+															               		tbody=[];
+														                  	}
+													               		}
+															            }*/
+															            for(var p=0;p<quindias.result.length;p++){
+															            	//console.log('e mes de quincena',mesquin); // 272 enero
+															            	if(mesquin==quindias.result[p].mes){
+															            		diasmes.push(quindias.result[p].dia);
+															            		if(diasmes[p]<8){
+															            			idasigdias15.push(quindias.result[p].idasignaciondiasquincenal);
+															            		}
+															            	}
+															            	
+															            }
+															            console.log('erer',idasigdias15);
+
+															            var cadena, cad=[];
+															            for(var j=0; j<detallequin.result.length; j++){
+																				idsam.push(detallequin.result[j].idsam);cadena=detallequin.result[j].tickeo;
+																			   for(var c=0;c<cadena.length;c++){
+																			    	var caracter=cadena.charAt(c);
+
+																			    	if(caracter==1){
+																			    		cad.push((c+1));
+																			    	}
+																			   }
+																			   console.log('por',cad);
+
+																            for (var i = 0; i < diasmes.length; i++) {
+																            	for (var k = 0; k < cad.length; k++) {
+																            		if((diasmes[i]<=7)&&(diasmes[i]==cad[k])){
+																            			for(var vo=0;vo<volu.result.length;vo++){
+																								if(diasmes[i]==volu.result[vo].dia){
+																									//volumen.push(volu.result[vo].cantidades);
+																									var usuario=[];
+																					            for(var t=0;t<tareasper.result.length;t++){
+																					            	for (var n = 0; n < idasigdias15.length; n++) {  // nota: poner < 1
+																					            		if(idasigdias15[n]==tareasper.result[t].idasignaciondias){
+																					            			usuario.push(tareasper.result[t].idusuario);
+																					            		}
+																					            	};
+																					            }
+																					            var idve=[],codinter=[],tvehi=[],todoveh=[];
+																					            for (var u = 0; u < usuario.length; u++) {
+																					            	for(var pdv=0;pdv<partesdiarios.result.length;pdv++){
+																						            	for (var ve = 0; ve < asigvehi.result.length; ve++) {
+																							            	for (var mo = 0; mo < vehi.result.length; mo++) {
+																							            		if(usuario[u]==asigvehi.result[ve].encargado){
+																							            		
+																									            	if(asigvehi.result[ve].idequipo==vehi.result[mo].idequipos){
+																									            		//codinter.push(vehi.result[mo].codinterno);
+																									            		tvehi.push(vehi.result[mo].codinterno);
+																									            		tvehi.push(partesdiarios.result[pdv].TotalHorasTrabajadas);
+																									            		todoveh.push(tvehi);
+																									            		tvehi=[];
+																									            	}
+																									            }
+																							            	};
+																								         };
+																								      }
+																					            };
+																					            
+																					            var codper=[], cargo=[], tper=[],todoper=[];
+																					            var horatra=[];
+																					            
+																					            for(var q=0;q<codpersonal.result.length;q++){
+																					            	
+																										for(var pd=0;pd<partesdiarios.result.length;pd++){
+																											for(var as=0;as<asigusua.result.length;as++){
+
+																							            	for(var d=0;d<usuario.length;d++){
+																							            		if(usuario[d]==asigusua.result[as].idusuario){
+																								            		if(asigusua.result[as].perfil==codpersonal.result[q].codigo){   //nota  &&usuario[d]==partesdiarios.result[pd].idUsuario
+																								            			//codper.push(codpersonal.result[q].clase);cargo.push(codpersonal.result[q].descripcion);
+																								            			tper.push(codpersonal.result[q].clase);
+																								            			tper.push(partesdiarios.result[pd].TotalHorasTrabajadas); // aqui las horas trabajadas
+																								            			todoper.push(tper);
+																								            			tper=[];
+
+																								            		}
+																								            	}
+																							            	}
+																							            }
+																						            }
+																					            }
+																				            	for(var z=0;z<samm.result.length;z++){
+																			                  	if(idsam[j]==samm.result[z].idsam){
+																							            tbody.push(diasmes[i]);
+																							            tbody.push(samm.result[z].codsam);
+																							            tbody.push(detallequin.result[j].seccion);
+																							            //tbody.push(samm.result[z].unidad);
+																							            tbody.push(detallequin.result[j].progresivade);
+																							            tbody.push(detallequin.result[j].progresivahasta);
+																							            tbody.push(detallequin.result[j].cantidadtrabajoprog);
+																							            tbody.push(volu.result[vo].cantidades);
+																							            tbody.push(todoper[i]);
+																							            tbody.push(todoveh[i]);
+																							            tbody.push(observaciones);
+																							            
+																							            todopq.push(tbody);
+																				               		tbody=[];
+																			                  	}
+																		               		}
+																								}
+																							}	
+																            		}
+																            	};
+																            };
+																         }
+																         //console.log('los usuarios:',usuario);
+																         //console.log('la clase:',todoveh);
+															            console.log('primer',todopq);
+																			socket.emit('resppdfinfsem',{'infsem':todopq});
+
+																			/*query.get('partesdiarios').where({'Tramo':ruta}).execute(function(partesdiarios){
+																				var horatra=[];
+																				for(var i=0;i<partesdiarios.result.length;i++){
+																					for(var j=0;j<usuario.length;j++){
+																            		if(usuario[j]==partesdiarios.result[i].idUsuario){
+																            			horatra.push(partesdiarios.result[i].TotalHorasTrabajadas);
+																            		}
+																            	}
+																				}
+																				console.log('las horas:',horatra);
+																            
+																            for(var k=0; k<equipquin.result.length; k++){
+																               idequipos.push(equipquin.result[k].idequipo);
+																               for(var v=0;v<vehi.result.length;v++){
+																               	if(idequipos[k]==vehi.result[v].idequipos){
+																               		tbodyequi.push(vehi.result[v].codinterno);
+																               		tbodyequi.push(equipquin.result[k].litroshora);
+																               		todoequi.push(tbodyequi);
+																               		tbodyequi=[];
+																               	}
+																               }
+																            }
+																            for(var l=0; l<materialquin.result.length; l++){
+																               idmaterial.push(materialquin.result[l].idmaterial);
+																            	for(var m=0;m<material.result.length;m++){
+																            		if(idmaterial[l]==material.result[m].idmaterialessam){
+																            			tbodymate.push(material.result[m].descripcion);
+																            			tbodymate.push(materialquin.result[l].cantidad);
+																            			tbodymate.push(materialquin.result[l].precio);
+																            			todomater.push(tbodymate);
+																               		tbodymate=[];
+																            		}
+																            	}
+																            }
+																            console.log('primer',todopq);
+																				socket.emit('resppdfinfsem',{'PQ':todopq,'equiPQ':todoequi,'materPQ':todomater,volumen,observaciones});
+																			})*/
+																		})
+																	})
+																})
+															})
+														})
+													})
+												})
+											})
+										})
+									})
+								})
+							})
+						})
+					})
+				})
+			})
+		}		
+	})
+
+//..............................ver programacion quincenal ............................................//
 	socket.on('verPQ',function(valor){
 		var estadoquince;
 		query.get('quincenal').execute(function(resultado){
@@ -909,7 +1449,7 @@ io.on('connection',function(socket){
 											            	}
 											            }
 											            listarprogramacionesquincenales.push({'estado':true,'codisam':codisam,'descripcion':descripcion,'unidad':unidad,'descriptramo':descrip,'idprogramacionquincenal':idprogramacionquincenal,'fechapreparacion':fechapreparacion,'fechade':fechade,'fechahasta':fechahasta,'ruta':ruta,'observaciones':observaciones,'mesquin':mesquin,'idsam':idsam,'progresivade':progresivade,'progresivahasta':progresivahasta,'cantidadtrabajoprog':cantidadtrabajoprog,'tickeo':tickeo,'seccion':seccion,'codigointerno':codigointerno,'litroshora':litroshora, 'descripmaterial':descripmaterial,'cantidad':cantidad,'precio':precio,});
-															console.log('la programacion para listar:',listarprogramacionesquincenales);
+															//console.log('la programacion para listar:',listarprogramacionesquincenales);
 															socket.emit('respverPQ',{'listarprogramacionesquincenales':listarprogramacionesquincenales,'estadoquince':estadoquince});
 														})
 													})
@@ -925,7 +1465,7 @@ io.on('connection',function(socket){
 			}
 		})
 	});
-//..............................modificar programacion quincenal................................//
+//..............................modificar programacion quincenal....................................//
 	socket.on('modificarPQ',function(valor){
 		var estadoquince;
 		query.get('quincenal').execute(function(resultado){
@@ -1073,11 +1613,12 @@ io.on('connection',function(socket){
 						})
 					})
 				}
+				console.log('arreglar aqui ');
 			}	
 		})
 	});
 	
-//............................update programacion quincenal............................................//
+//............................update programacion quincenal.......................................//
 	socket.on('modificardatos',function(valor){
 		console.log('llego los datos modificados', valor);
 		var dato0=Object();
@@ -1152,7 +1693,7 @@ io.on('connection',function(socket){
 		})
 	})
 
-//............................personallll de residencia para asignacion de actividades......................//
+//....................personallll de residencia para asignacion de actividades..................//
 	socket.on('usuariosparamiresidencia',function(aux){
 		var idresidencia=aux;
 		//console.log('lass4',idresidencia.idresidencia);
@@ -1364,7 +1905,7 @@ io.on('connection',function(socket){
 		});
 	});
 	
-//........registrar actividades trabajador.................//
+//...............................registrar actividades trabajador.............................//
 	socket.on('registrarasignaciontrab',function(valor){
 		var aux=0;
 		console.log('llegoooooooooooo',valor);
@@ -1482,15 +2023,15 @@ io.on('connection',function(socket){
 		}
 	});
 
-//...........informe semanal..........................//
+//.................................informe semanal..........................................//
 	socket.on('informesemanal',function(aux){
 		var idusuario=aux.idusuario;
 		var idresidencia=aux.idresidencia;
-		var mes='enero';
+		var mes='febrero';
 		query.get('informesemanal').execute(function(infosemanal){
 			if(infosemanal.result.length>0){
-				console.log('datos info semanal:',infosemanal);
-				query.get("quincenal").where({'idusuario':idusuario}).execute(function(programacionquincenal){
+				//console.log('datos info semanal:',infosemanal);
+				query.get("quincenal").where({'idusuario':2}).execute(function(programacionquincenal){
 					//console.log('el informe:',programacionquincenal);
 					var ultimo;
 					var penultimo;
@@ -1503,7 +2044,7 @@ io.on('connection',function(socket){
 					
 					if(programacionquincenal.result.length>0){
 						var idproquincenal=programacionquincenal.result[penultimo].idprogramacionquincenal;
-						console.log('mnb',idproquincenal);
+						//console.log('mnb',idproquincenal);
 						if(programacionquincenal.result.length>1){
 							idproquincenal2=programacionquincenal.result[ultimo].idprogramacionquincenal;
 							var totaltickes=[],totaltickes1=[];
@@ -1525,18 +2066,18 @@ io.on('connection',function(socket){
 															idsdeprogramacionquincenal.push(idproquincenalpenultimomes,idproquincenalultimomes);
 															var cantidades=[],dia=[];
 															for(var i=0;i<volumen.result.length;i++){
-															for(var t=0;t<idsdeprogramacionquincenal.length;t++){
-																if(idsdeprogramacionquincenal[t]==volumen.result[i].idproquincena){
-																	cantidades.push(volumen.result[i].cantidades);dia.push(volumen.result[i].dia);
-																}else{
-																	if(volumen.result.length==0){
-																		console.log('no existe volumenes del mes');
+																for(var t=0;t<idsdeprogramacionquincenal.length;t++){
+																	if(idsdeprogramacionquincenal[t]==volumen.result[i].idproquincena){
+																		cantidades.push(volumen.result[i].cantidades);dia.push(volumen.result[i].dia);
+																	}else{
+																		if(volumen.result.length==0){
+																			console.log('no existe volumenes del mes');
+																		}
 																	}
 																}
-															}
 																
 															}
-															console.log('utututu',cantidades);
+															//console.log('utututu',cantidades);
 															var horastrabajadas=[],idpartesdiarios=[];
 															//console.log('hh',programacionquincenal.result[0].ruta);
 															for(var k=0;k<partesdiarios.result.length;k++){
@@ -1549,7 +2090,7 @@ io.on('connection',function(socket){
 														var vlistacol2=[];
 														for(var l=0; l<infosemanal.result.length; l++){
 															for(var i=0; i<vehiculos.result.length; i++){
-																console.log('proba',infosemanal.result[l].ninternoequipo);
+																//console.log('proba',infosemanal.result[l].ninternoequipo);
 																if(infosemanal.result[l].ninternoequipo==vehiculos.result[i].idequipos){
 																	vlista2.push(vehiculos.result[i].codinterno);
 																	//console.log('ssss',vlista1);
@@ -1560,7 +2101,7 @@ io.on('connection',function(socket){
 															}
 														}
 														vehiculoss.push({'estado':true,'codinterno':vlista2,'codinterno1':vlistacol2});
-														console.log('lolo',vehiculoss);
+														//console.log('lolo',vehiculoss);
 														for(var i=0; i<detallequincenal.result.length; i++){
 															var samcod,tickeo,idsam,seccion,proinicial,progfinal;
 															for(var j=0; j<sam.result.length; j++){
@@ -1616,7 +2157,7 @@ io.on('connection',function(socket){
 								query.get("detallequincenal").where_or({'idproquincena':idproquincenal2}).execute(function(detallequincenal2){
 									query.get("codificacionsam").execute(function(sam){
 										//console.log('el sammmm',sam);
-										query.get("asignacionvehiculos").where({'idresidencia':idresidencia}).execute(function(asignacionvehiculos){
+										query.get("asignacionvehiculos").execute(function(asignacionvehiculos){
 											query.get("vehiculos").execute(function(vehiculos){
 												var idtramopartediario=programacionquincenal.result[0].ruta;
 												query.get('partesdiarios').where({'idResidencia':idresidencia,'Tramo':idtramopartediario}).execute(function(partesdiarios){
@@ -1673,7 +2214,7 @@ io.on('connection',function(socket){
 															}
 															totaltickes1.push({'idsam':idsam1,'tickeo':tickeo1,'sam':samcod1,'seccion1':seccion1,'proinicial1':proinicial1,'progfinal1':progfinal1})
 														}
-														console.log('primera quincena:',totaltickes);
+														console.log('primera quincenal:',totaltickes);
 														console.log('segunda quincena:',totaltickes1);
 														socket.emit('insertarinformesemanal',{'estado':false,'estadoquincena':true,'totalsemanas':true,'totalticket':totaltickes,'totalticket1':totaltickes1,'vehiculoss':vehiculoss,'cantidades':cantidades,'dia':dia});
 													})
@@ -1707,7 +2248,7 @@ io.on('connection',function(socket){
 			}
 		})
    })
-//....................registrar informe semanal............................//
+//..............................registrar informe semanal..................................//
 	socket.on('llenarinformesemanal',function(valor){
 		console.log('llego datos del informe', valor);
 		var ci=valor.ci;

@@ -1,4 +1,10 @@
 $(function(){
+    $('#logout').click(function(){
+        localStorage.removeItem('userinfo');
+        location.href="/";
+    });
+    $('#avatarNombre').text((info.nombres).split(" ")[0]);
+    $('#avatarNombre').append('<span class="glyphicon glyphicon-user"></span>');
     
     var socket=io();
     var socket2=io();
@@ -409,9 +415,9 @@ $(function(){
                             }
                         }
                     }
-                    for (var j = 0; j < values.totalticket1.length; j++) {
+                    //for (var j = 0; j < values.totalticket1.length; j++) {
 
-                    }
+                    //}
                     diatotal=diatotal+dias.length;
                     console.log('dias2_______-',diatotal);
                     for (var i = 0; i < dias.length; i++) {

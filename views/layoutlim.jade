@@ -12,6 +12,11 @@ html
     script(src="/javascripts/menuprincipal.js")
     script(src="/javascripts/sweetalert.min.js")
     script(src="/javascripts/Mensajes.js")
+    script(type="text/javascript").
+      var info=JSON.parse(localStorage.getItem('userinfo'));
+      if(info==null){
+        location.href="/";
+      }
       
   body
     .row
@@ -50,11 +55,11 @@ html
                 li
                   a(href='#',id='btnMensajes', data-toggle="modal" data-target="#myModal") Mensajes
                 li
-                  a(href="#", class="dropdown-toggle avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
-                                  span(class="glyphicon glyphicon-user")
-                                    ul(class="dropdown-menu")
-                                      li
-                                        a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
-                                      li
-                                        a(style='cursor:pointer',id='salirsistema') Salir
+                  a(href="#", class="dropdown-toggle" id="avatarNombre", data-toggle="dropdown", role="button", aria-haspopup="true", aria-expanded="false") NameUser
+                    span(class="glyphicon glyphicon-user")
+                      ul(class="dropdown-menu")
+                        li
+                          a(data-toggle="modal", class="info", data-target="#modalUser",style='cursor:pointer',id='miperfil') Mi Perfil
+                        li
+                          a(style='cursor:pointer',id='logout') Salir
     block content

@@ -26,8 +26,12 @@ body {
 }
 h3{
 	text-align: center;
+	padding-bottom: 16px;
 }
-
+#btnmes{
+	position:absolute;
+	
+}
 
 
 

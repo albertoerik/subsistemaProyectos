@@ -8,5 +8,10 @@ html
     script(src="/javascripts/jquery.js")
     script(src="/socket.io/socket.io.js")
     script(src="/javascripts/login.js")
+    script(type="text/javascript").
+      var info=JSON.parse(localStorage.getItem('userinfo'));
+      if(info!=null){
+        location.href="/MenuPrincipal";
+      } 
   body(style="background-color: #23323d")
     block content
